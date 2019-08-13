@@ -1,6 +1,12 @@
 // mimic react style
 
-export default (props) => {
+export default class Chart{
+    constructor(props){
+        this.data = props.data
+    }
+}
+
+Chart.dummyData = () => {
     const dummyData = []
     const dataLength = 10;
     const mag = 15;
@@ -9,16 +15,16 @@ export default (props) => {
         const datum = [x, y];
         dummyData.push(datum);
     }
-    const data = props.data || dummyData
+    return dummyData
+}
 
+Chart.build = (data) => {
     const xdata = []
     const ydata = []
-
     data.forEach(datum => {
         xdata.push(datum[0])
         ydata.push(datum[1])
     })
-
     const margin = {
         top: 50,
         right: 25,
@@ -28,9 +34,8 @@ export default (props) => {
     const width = 600 - margin.left - margin.right;
     const height = 400 - margin.top - margin.bottom;
 
-  
-
     //create the chart object
+    // let svg = document.createElement("svg")
     const svg = d3.select('svg')
             .attr('width', width + margin.left + margin.right)
             .attr('height', height + margin.top + margin.bottom)
@@ -39,7 +44,7 @@ export default (props) => {
             .attr("transform", `translate(${margin.left}, ${margin.top})`)
 
     const xscl = d3.scaleLinear()
-        .domain([0, dataLength])
+        .domain([0, d3.max(xdata)])
         .range([0, width]);
 
     const yscl = d3.scaleLinear()
@@ -56,8 +61,6 @@ export default (props) => {
         .attr("class", `xaxis`)
         .call(x_axis)
 
-    // svg.select('.xaxis .tick:first-child').remove();//currently not working //remove the first tick to fix alignment
-
     svg.append("g")
         .attr("class", `yaxis`)
         .call(y_axis);
@@ -70,10 +73,45 @@ export default (props) => {
 
     // draw the line
     svg.append("path")
-        .attr("fill", "none")
-        .attr("stroke", "black")
-        .attr("stroke-width", "2px")
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", "2px")
         .datum(ydata)
-        .attr("class", "line")
-        .attr("d", line);
+            .attr("class", "line")
+            .attr("d", line);
+}
+
+Chart.update = (data) => {
+    const svg = d3.select('svg')
+    const ydata = []
+    data.forEach(datum => {
+        ydata.push(datum[1])
+    })
+
+    svg.data(data)
+        .enter().append("path")
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", "2px")
+        .datum(ydata)
+            .attr("class", "line")
+            .attr("d", line);
+
+}
+
+Chart.render = ({ data }) => {
+    const svg = d3.select('svg').data(data)
+    const ydata = []
+    data.forEach(datum => {
+        ydata.push(datum[1])
+    })
+
+    svg.enter().append('path')
+            .attr("fill", "none")
+            .attr("stroke", "black")
+            .attr("stroke-width", "2px")
+        .datum(ydata)
+            .attr("class", "line")
+            .attr("d", line);
+    svg.exit().remove();
 }

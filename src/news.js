@@ -13,10 +13,6 @@ const page = int => (`page=${int}&`);
 
 const apiKey = `apiKey=${news_api_key}`
 
-
-
-
-
 export const fetchHeadlines = () => {
     const url = headlines + addCountry('us') + apiKey;
     const req = new Request(url);
@@ -25,19 +21,13 @@ export const fetchHeadlines = () => {
             .then(response => console.log(response.json()))    
 };
 
-export const fetchEverythingFor = () => {
-    const query = 'bees';
+export const fetchEverythingFor = (query) => {
     const url = everything + addQuery(query) + apiKey;
     const req = new Request(url);
     console.log(`Requesting top 20 articles about ${query}!`)
     return fetch(req)
-        .then(response => {
-            const result = Promise.resolve(response)
-            if (result.status === "ok"){
-                console.log(result.articles)
-            } else {
-                console.log(response.json());
-                console.log(response);
-                console.log(result)
-            }
-        })}
+        .then(response => response.json())
+        // .then(data => console.log(data.articles))
+}
+
+
