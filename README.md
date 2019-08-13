@@ -58,5 +58,3 @@ The main files will be:
 - [ ] Finalize visuals
 - [ ] Implement filtering by location
 - [ ] Implement saving up to 3 queries to display all at once on the graph
-
-
