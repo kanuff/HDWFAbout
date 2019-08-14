@@ -6,7 +6,7 @@ export default class Chart{
         this.margin = {
             top: 50,
             right: 25,
-            bottom: 50,
+            bottom: 70,
             left: 40,
         }
         this.width = 600 - this.margin.left - this.margin.right;
@@ -21,7 +21,6 @@ export default class Chart{
 
     dummyData(){
         const dummyData = []
-        // const dataLength = Math.floor(Math.random() * 25) + 3;
         const dataLength = 15;
         const mag = 25;
         for (let x = 0; x < dataLength; x++) {
@@ -63,7 +62,7 @@ export default class Chart{
                         .scale(yscl)
 
         svg.append("g")
-            .attr("transform", `translate(0,${(height/2)})`)
+            .attr("transform", `translate(0,${(height)})`)
             .attr("class", `xaxis`)
             .call(x_axis)
 
@@ -74,10 +73,9 @@ export default class Chart{
         // create line generator
 
         const line = d3.line()
-            .x( d => { console.log(d); return xscl(d.x) } )
+            .x( d => { return xscl(d.x) } )
             .y( d => { return yscl(d.y) } )
             .curve(d3.curveMonotoneX);
-
 
         // draw the line
         svg.append('path')
@@ -87,31 +85,60 @@ export default class Chart{
             .data([data])
                 .attr("class", "line")
                 .attr("d", line);
+
+        svg.append("line")
+            .attr("x1", 0)
+            .attr("y1", yscl(-5))
+            .attr("x2", width)
+            .attr("y2", yscl(-5))
+            .attr("fill", "none")
+            .attr("stroke", "red")
+            .attr("stroke-width", "1px")
+            .attr("class", "bad-line")
+            .style("stroke-dasharray", ("3, 3"))
+
+        svg.append("line")
+            .attr("x1", 0)
+            .attr("y1", yscl(5))
+            .attr("x2", width)
+            .attr("y2", yscl(5))
+            .attr("fill", "none")
+            .attr("stroke", "green")
+            .attr("stroke-width", "1px")
+            .attr("class", "good-line")
+            .style("stroke-dasharray", ("3, 3"))
     }
 
-    render(data){
+    render(payload){
+        const data = payload.lineData;
+        const scatterData = payload.scatterData;
         const svg = this.svg;
         const ydata = []
         const xdata = []
         const height = this.height
         const width = this.width
+        const margin = this.margin
 
-        data.forEach(datum => {
+        scatterData.forEach(datum => {
             ydata.push(datum.y)
             xdata.push(datum.x)
         })
 
-        const xscl = d3.scaleLinear()
-            .domain([0, d3.max(xdata)])
+        console.log(d3.min(ydata))
+        console.log(d3.max(ydata))
+
+        const parseTime = d3.timeParse("%Y-%m-%d")
+        const xFormat = "%Y-%m-%d";
+        const xscl = d3.scaleTime()
+            .domain(d3.extent(data, d => { return parseTime(d.x) }))
             .range([0, width]);
+
+        const x_axis = d3.axisBottom()
+            .scale(xscl)
 
         const yscl = d3.scaleLinear()
             .domain([d3.max(ydata), d3.min(ydata)])
             .range([0, height]);
-
-
-        const x_axis = d3.axisBottom()
-            .scale(xscl)
 
         const y_axis = d3.axisLeft()
             .scale(yscl)
@@ -120,7 +147,14 @@ export default class Chart{
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
-            .call(x_axis);
+            .attr("transform", `translate(0,${yscl(0)})`)
+            .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
+            .selectAll("text")
+            .attr("y", 0)
+            .attr("x", 9)
+            .attr("dy", ".35em")
+            .attr("transform", "rotate(90)")
+            .style("text-anchor", "start");
 
         svg.select(".yaxis")
             .transition()
@@ -130,8 +164,8 @@ export default class Chart{
 
 
         const line = d3.line()
-            .x(d => { console.log(d); return xscl(d.x) })
-            .y(d => { return yscl(d.y) })
+            .x(d => { return xscl(parseTime(d.x)); })
+            .y(d => { return yscl(d.y); })
             .curve(d3.curveMonotoneX);
 
         svg.selectAll('.line')
@@ -145,7 +179,97 @@ export default class Chart{
                 .duration(2000)
                 .attr("d", line);
 
-        svg.selectAll('path')
+        svg.select(".good-line")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("x1", 0)
+            .attr("y1", yscl(5))
+            .attr("x2", width)
+            .attr("y2", yscl(5))
+            .attr("display", d => {
+                if (yscl(5) < 0) {
+                    return "none"
+                } else {
+                    return "inherit"
+                }
+            })
+
+        svg.select(".bad-line")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("x1", 0)
+            .attr("y1", yscl(-5) )
+            .attr("x2", width)
+            .attr("y2", yscl(-5))
+            .attr("display", d => {
+                if (yscl(-5) > height) {
+                    return "none"
+                } else {
+                    return "inherit"
+                }
+            } )
+
+        svg.selectAll(".dot")
+            .data(scatterData)
+        .enter().append("circle")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("class", "dot")
+            .attr("cx", d => { return xscl(parseTime(d.x)) })
+            .attr("cy", d => {return yscl(d.y)})
+            .attr("r", 4)
+            .style("opacity", d => {
+                if (d.y >= 5) {
+                    return "0.8"
+                } else if (d.y <= -5) {
+                    return "0.8"
+                } else {
+                    return "0.2"
+                }
+            })
+            .style("fill", d => {
+                if(d.y >=5){
+                    return "green"
+                } else if (d.y <= -5){
+                    return "red"
+                } else {
+                    return "black"
+                }
+            });
+
+        svg.selectAll(".dot")
+            .data(scatterData)
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("class", "dot")
+            .attr("cx", d => { return xscl(parseTime(d.x)) })
+            .attr("cy", d => { return yscl(d.y) })
+            .style("opacity", d => {
+                if (d.y >= 5) {
+                    return "0.8"
+                } else if (d.y <= -5) {
+                    return "0.8"
+                } else {
+                    return "0.2"
+                }
+            })
+            .style("fill", d => {
+                if (d.y >= 5) {
+                    return "green"
+                } else if (d.y <= -5) {
+                    return "red"
+                } else {
+                    return "black"
+                }
+            });
+
+        svg.selectAll(".dot")
+            .data(scatterData)
             .exit().remove();
+
     }
 }

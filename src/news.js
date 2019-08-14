@@ -6,6 +6,7 @@ const addCountry = country => (`country=${country}&`);
 const addSource = source => (`sources=${source}&`);
 const addQuery = query => (`q=${query}&`); //searches for query in both title and body
 const addFrom = start => (`from=${start}&`);
+const sortBy = option => (`sortBy=${option}&`);
 const addTo = end => (`to=${end}&`);
 const addLanguage = ln => (`language=${ln}&`);
 const addPagesize = int => (`pageSize=${int}&`);
@@ -22,7 +23,7 @@ export const fetchHeadlines = () => {
 };
 
 export const fetchEverythingFor = (query) => {
-    const url = everything + addQuery(query) + apiKey;
+    const url = everything + addQuery(query) + addPagesize(100) + sortBy('relevancy') + apiKey;
     const req = new Request(url);
     console.log(`Requesting top 20 articles about ${query}!`)
     return fetch(req)

@@ -1,4 +1,5 @@
 import { fetchEverythingFor } from './news'
+import { processData } from './sentiment';
 
 
 export default (props) => {
@@ -17,18 +18,15 @@ export default (props) => {
         const value = queryInput.value;
         console.log(`I WAS SUBMITTED WITH THE TEXT ${value}`)
         fetchEverythingFor(value)
-            .then(data => {
-                console.log(data.articles)
-                props.articles = data.articles
-            })//.then( data => processData(data) ) // should return array of objects, x is datetime, y is sentiment score
-            .then( (processedData) => {
+            .then(response => {
+                // console.log(response.articles)
+                
+               return response.articles
+            })
+            .then( articles => processData(articles) ) // should return array of objects, x is datetime, y is sentiment score
+            .then( (payload) => {
                 console.log("Rerendering");
-                //chart.render(processedData)
-                chart.render([
-                    { x: 0, y: 3 },
-                    { x: 4, y: 2 },
-                    { x: 5, y: 1 },
-                ])
+                chart.render(payload)
             })
 
 
