@@ -19,10 +19,33 @@ document.addEventListener('DOMContentLoaded', () => {
     newDiv.appendChild(newContent);
     root.appendChild(newDiv);
     // Testing because I forgot how to vanilla js
+    
+    const chart = new Chart(props)
+    props.chart = chart
 
-    const dummyData = Chart.dummyData();
-    Chart.build(dummyData);
     root.appendChild(queryField(props));
 
+    console.log(chart)
+    const dummyData = chart.dummyData();
+    console.log(dummyData)
+    const otherData = [
+        {x:0,y:1},
+        {x:1,y:2},
+        {x:2,y:4},
+    ]
+    chart.build(dummyData);
+    console.log(chart)
+    const svg = d3.select('svg')
+    console.log(svg)
+    
+    
+    setInterval(() => {
+        console.log("Rerendering");
+        const newData = chart.dummyData()
+        chart.render(newData)}, 5000)
+        //     svg.data()
+        // }, 2000)
+        
+    
     
 })

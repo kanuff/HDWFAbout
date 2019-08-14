@@ -27,7 +27,6 @@ export const fetchEverythingFor = (query) => {
     console.log(`Requesting top 20 articles about ${query}!`)
     return fetch(req)
         .then(response => response.json())
-        // .then(data => console.log(data.articles))
 }
 
 
