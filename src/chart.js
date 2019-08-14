@@ -117,15 +117,11 @@ export default class Chart{
         const xdata = []
         const height = this.height
         const width = this.width
-        const margin = this.margin
 
         scatterData.forEach(datum => {
             ydata.push(datum.y)
             xdata.push(datum.x)
         })
-
-        console.log(d3.min(ydata))
-        console.log(d3.max(ydata))
 
         const parseTime = d3.timeParse("%Y-%m-%d")
         const xFormat = "%Y-%m-%d";
@@ -211,15 +207,64 @@ export default class Chart{
                 }
             } )
 
-        svg.selectAll(".dot")
+        d3.selectAll("tooltip")
+            .attr("position", "absolute")
+            .attr("text-align", "center")
+            .attr("width", "fit-content")
+            .attr("height", "fit-content")
+            .attr("background", "grey")
+            // .attr("z-index", "10")
+
+        const div = d3.select("body").append("div")
+            .attr("class", "tooltip")
+            .style("opacity", 0);
+
+        const createDots = svg.selectAll(".dot")
             .data(scatterData)
-        .enter().append("circle")
+            .enter().append("circle")
+            .on("click", d => {
+                window.open(d.url, "_blank")
+            })
+            .on("mouseover", d => {
+                div.transition()
+                    .duration(200)
+                    .style("opacity", 0.9);
+                div.html(d.title + "<br/>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");
+            })
+            .on("mouseout", function (d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
+
+        const updateDots = svg.selectAll(".dot")
+            .data(scatterData)
+            .on("click", d => {
+                window.open(d.url, "_blank")
+            })
+            .on("mouseover", d => {
+                div.transition()
+                .duration(200)
+                .style("opacity", 0.9);
+                div.html(d.title + "<br/>")
+                    .style("left", (d3.event.pageX) + "px")
+                    .style("top", (d3.event.pageY - 28) + "px");	
+            })
+            .on("mouseout", function (d) {
+                div.transition()
+                    .duration(500)
+                    .style("opacity", 0);
+            })
+
+        createDots
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
-            .attr("cy", d => {return yscl(d.y)})
+            .attr("cy", d => { return yscl(d.y) })
             .attr("r", 4)
             .style("opacity", d => {
                 if (d.y >= 5) {
@@ -231,17 +276,16 @@ export default class Chart{
                 }
             })
             .style("fill", d => {
-                if(d.y >=5){
+                if (d.y >= 5) {
                     return "green"
-                } else if (d.y <= -5){
+                } else if (d.y <= -5) {
                     return "red"
                 } else {
                     return "black"
                 }
             });
 
-        svg.selectAll(".dot")
-            .data(scatterData)
+        updateDots
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
@@ -270,6 +314,5 @@ export default class Chart{
         svg.selectAll(".dot")
             .data(scatterData)
             .exit().remove();
-
     }
 }
