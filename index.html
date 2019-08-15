@@ -4,12 +4,51 @@
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <meta http-equiv="X-UA-Compatible" content="ie=edge">
-        <!-- <link rel="stylesheet" href="./dist/main.css" /> -->
+        <link rel="stylesheet" href="./dist/main.css" />
         <title>HDWFAbout</title>
+        <script src='https://d3js.org/d3.v4.min.js'></script>
+        <script type="text/javascript" src="./dist/main.js"></script>
     </head>
     <body>
-        <div id="main">If You Can See Me It's Maybe Working</div>
-        <script src="./dist/main.js"></script>
+        <div id="main">
+            <div class="chart-title">How Did We Feel About...</div>
+        </div>
+        <div class="info-container">
+            <div class="article-info">
+                <div class="article-info-container">
+                    <div class="article-title-container">
+                        <div class="article-title-label label">Title: </div>
+                        <div class="article-title info"></div>
+                    </div>
+                    <div class="article-author-container flex-row">
+                        <div class="article-author-label label">Author: </div>
+                        <div class="article-author info"></div>
+                    </div>
+                    <div class="article-sentiment-container flex-row">
+                        <div class="article-sentiment-label label">Sentiment: </div>
+                        <div class="article-sentiment info"></div>
+                    </div>
+                    <div class="article-relevance-container flex-row">
+                        <div class="article-relevance-label label">Relevance: </div>
+                        <div class="article-relevance info"></div>
+                    </div>
+                    <div class="article-description-container">
+                        <div class="article-description-label label">Description: </div>
+                        <div class="article-description info"></div>
+                    </div>
+                </div>
+                Articles
+                <div class="articles-container">
+                    <ul>
+                        <li>Article one</li>
+                        <li>Article two</li>
+                        <li>Article three</li>
+                    </ul>
+                </div>
+            </div>
+            <svg id="chart"></svg>
+        </div>
+
     </body>
     <footer>
         Powered by <a href="https://newsapi.org/">News</a>

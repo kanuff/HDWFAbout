@@ -1,49 +1,160 @@
-/* http://meyerweb.com/eric/tools/css/reset/ 
-   v2.0 | 20110126
-   License: none (public domain)
-*/
 
-html, body, div, span, applet, object, iframe,
-h1, h2, h3, h4, h5, h6, p, blockquote, pre,
-a, abbr, acronym, address, big, cite, code,
-del, dfn, em, img, ins, kbd, q, s, samp,
-small, strike, strong, sub, sup, tt, var,
-b, u, i, center,
-dl, dt, dd, ol, ul, li,
-fieldset, form, label, legend,
-table, caption, tbody, tfoot, thead, tr, th, td,
-article, aside, canvas, details, embed, 
-figure, figcaption, footer, header, hgroup, 
-menu, nav, output, ruby, section, summary,
-time, mark, audio, video {
-	margin: 0;
-	padding: 0;
-	/* border: 0; */
-	font-size: 100%;
-    font-family: 'Lato', sans-serif;
-    vertical-align: baseline;
-    letter-spacing: 0.05em;
+:root{
+	--title-font: Georgia, 'Times New Roman', Times, serif;
+	--title-font-size: 17px;
+	--title-font-weight: 600;
 }
-/* HTML5 display-role reset for older browsers */
-article, aside, details, figcaption, figure, 
-footer, header, hgroup, menu, nav, section {
-	display: block;
+
+html {
+	background-color: rgba(0,0,0,0.9);
 }
-body {
-	line-height: 1;
+
+html * {
+	color: rgba(255, 255, 255, 0.8);
 }
-ol, ul {
-	list-style: none;
+
+
+body > svg {
+	display: flex;
+	margin: 0 auto;
 }
-blockquote, q {
-	quotes: none;
+
+body > div {
+	display: flex;
+	margin: 0 auto;
+	justify-content: center;
+	padding: 10px;
 }
-blockquote:before, blockquote:after,
-q:before, q:after {
-	content: '';
-	content: none;
+
+#main > form {
+	border-bottom: 1px solid rgba(252, 250, 250, 0.8);
 }
-table {
-	border-collapse: collapse;
-	border-spacing: 0;
+
+body{
+	padding: 15px;
 }
+
+.chart-title {
+	display: flex;
+	width: fit-content;
+	font-family: var(--title-font);
+	font-size: var(--title-font-size);
+	font-weight: var(--title-font-weight);
+	padding: 5px;
+}
+
+.query-field{
+	border: none;
+	outline: none;
+	cursor: text;
+	height: 90%;
+	text-align: center;
+	font-family: var(--title-font);
+	font-size: var(--title-font-size);
+	font-weight: var(--title-font-weight);
+	background-color: transparent;
+}
+
+.query-field:hover{
+	background-color: rgb(255,255,255, 0.1);
+	border-radius: 4px;
+}
+
+svg {
+	padding: 15px;
+	border-radius: 4px;
+}
+
+
+.info-container {
+	display: flex;
+	background-color: transparent;
+	border-radius: 4px;
+}
+
+.article-info{
+	height: 68vh;
+	background-color: transparent;
+	border-radius: 4px;
+	width: 350px;
+	padding: 10px;
+	border-radius: 4px;
+	overflow: hidden;
+}
+
+.article-title {
+	padding-bottom: 8px;
+}
+
+.article-title-container{
+	max-height: 115px;
+	overflow: hidden;
+}
+
+.flex-row {
+	display: flex;
+}
+
+.label {
+	padding-right: 8px;
+	padding-bottom: 8px;
+	font-weight: 600;
+	font-size: var(--title-font-size);
+	text-decoration: underline;
+}
+
+.info {
+	line-height: 175%;
+	padding-bottom: 8px;
+	margin-top: -4px;
+}
+
+.debug {
+	border: 1px solid red;
+}
+
+.articles-container{
+	overflow-y: scroll;
+	overflow-x: hidden;
+	height: 40%;
+}
+
+.article-info-container{
+	padding-bottom: 15px;
+	height: 55%;
+	overflow-y: scroll;
+	overflow-x: hidden;
+}
+
+.article-info-container::-webkit-scrollbar {
+	width: 6px;
+	border-radius: 6px;
+}
+.article-info-container::-webkit-scrollbar-corner {
+	background: rgba(0,0,0,0);
+	height: 1px;
+}
+.article-info-container::-webkit-scrollbar-track-piece{
+    border-radius: 6px;
+	background: transparent;
+}
+.article-info-container::-webkit-scrollbar-thumb{
+	background: rgba(104, 104, 104, 0.822);
+	border-radius: 6px;
+}
+
+.dot{
+	cursor: pointer;
+}
+
+.dot {
+  -webkit-transition: fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -moz-transition:    fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -ms-transition:     fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -o-transition:      fill 0.15s, opacity 0.15s, background-color 0.1s;
+  transition:         fill 0.15s, opacity 0.15s, background-color 0.1s;
+}
+
+/* path{
+	fill: whitesmoke;
+} */
