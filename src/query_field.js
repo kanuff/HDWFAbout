@@ -59,7 +59,7 @@ const handleTyping = (event,props, queryInput) => {
 }
 
 
-// Use for testing, sourced from: https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
+// Use for testing functionality, sourced from: https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
 const debounce = (delay, fn) => {
     let timerId;
     return function (...args) {

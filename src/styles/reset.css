@@ -22,7 +22,7 @@ time, mark, audio, video {
 	font-size: 100%;
     font-family: 'Lato', sans-serif;
     vertical-align: baseline;
-    letter-spacing: 0.05em;
+	letter-spacing: 0.05em;
 }
 /* HTML5 display-role reset for older browsers */
 article, aside, details, figcaption, figure, 
@@ -50,5 +50,4 @@ table {
 
 path {
 	fill: none;
-	stroke: black;
 }

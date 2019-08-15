@@ -23,7 +23,7 @@ export const fetchHeadlines = () => {
 };
 
 export const fetchEverythingFor = (query) => {
-    const url = everything + addQuery(query) + addPagesize(100) + sortBy('relevancy') + apiKey;
+    const url = everything + addQuery(query) + addLanguage('en') + addPagesize(100) + sortBy('relevancy') + apiKey;
     const req = new Request(url);
     console.log(`Requesting top 20 articles about ${query}!`)
     return fetch(req)

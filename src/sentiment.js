@@ -1,4 +1,3 @@
-
 import Sentiment from 'sentiment'
 
 
@@ -23,14 +22,23 @@ export const processData = ({articles, value}) => {
         datum.relevance = Math.round(comparative * 1000)/1000
         datum.x = article.publishedAt.split("T")[0]
         datum.y = (datum.relevance/0.25) * (Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000);
-
         processingData.push(datum)
     })
     payload.scatterData = processingData;
-    const processedData = averageDayScores(processingData);
-    payload.lineData = processedData
+    payload.lineData = averageDayScores(processingData);
+    payload.total = calculateTotals(processingData);
 
     return payload
+}
+
+const calculateTotals = data => {
+    const total = {}
+    data.forEach(datum => {
+        total.score = total.score ? total.score + datum.y : datum.y
+        total.count = total.count ? total.count + 1 : 1
+    })
+    total.average = total.score/total.count;
+    return total
 }
 
 const averageDayScores = data => {
@@ -47,9 +55,6 @@ const averageDayScores = data => {
     })
     
     const sortedAveragedData = averagedData.sort(sortDate)
-    
-    // console.log(sortedAveragedData)
-
     return sortedAveragedData
 }
 

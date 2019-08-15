@@ -14,7 +14,7 @@ export default class Chart{
         this.svg = d3.select('svg')
             .attr('width', this.width + this.margin.left + this.margin.right)
             .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .style('background-color', 'whitesmoke')
+            .style('background-color', 'rgba(255,255,255, 0.1)')
             .append("g")
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
     }
@@ -62,7 +62,7 @@ export default class Chart{
                         .scale(yscl)
 
         svg.append("g")
-            .attr("transform", `translate(0,${(height)})`)
+            .attr("transform", `translate(0,${(yscl(0))})`)
             .attr("class", `xaxis`)
             .call(x_axis)
 
@@ -80,7 +80,7 @@ export default class Chart{
         // draw the line
         svg.append('path')
                 .attr("fill", "none")
-                .attr("stroke", "black")
+                .attr("stroke", "whitesmoke")
                 .attr("stroke-width", "2px")
             .data([data])
                 .attr("class", "line")
@@ -109,14 +109,34 @@ export default class Chart{
             .style("stroke-dasharray", ("3, 3"))
     }
 
+
+
     render(payload){
         const data = payload.lineData;
         const scatterData = payload.scatterData;
+        const total = payload.total
         let svg = this.svg;
         const ydata = []
         const xdata = []
         const height = this.height
         const width = this.width
+        console.log(d3.select(".chart-title"))
+        console.log(total)
+        d3.select(".chart-title")
+            .data([total])
+                .transition()
+                .ease(d3.easeExp)
+                .duration(2000)
+                .style("color", d => {
+                    console.log(d3.select("Inside the function"))
+                    if (d.average > 0.13) {
+                        return `rgba(${40 * Math.sqrt(d.average)}, ${128 * Math.sqrt(d.average)}, ${40 * Math.sqrt(d.average)}, 0.97)`
+                    } else if (d.average < -0.13) {
+                        return `rgba(${128 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, 0.97)`
+                    } else {
+                        return `rgba(${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, 0.8)`
+                    }
+                })
 
         const singleArticleInfo = d3.select(".article-info-container")
 
@@ -133,6 +153,7 @@ export default class Chart{
 
         const x_axis = d3.axisBottom()
             .scale(xscl)
+            
 
         const yscl = d3.scaleLinear()
             .domain([d3.max(ydata), d3.min(ydata)])
@@ -146,40 +167,27 @@ export default class Chart{
                 .ease(d3.easeExp)
                 .duration(2000)
             .attr("transform", `translate(0,${yscl(0)})`)
-            // .transition()
-            // .ease(d3.easeExp)
-            // .duration(2000)
             .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
-            .selectAll("text")
-                // .transition()
-                // .ease(d3.easeExp)
-                // .duration(2000)
+                .selectAll("text")
                 .attr("y", 0)
                 .attr("x", 9)
                 .attr("dy", ".35em")
                 .attr("transform", "rotate(90)")
-                .style("text-anchor", "start");
+                .style("text-anchor", "start")
+                .style("fill", "white")
 
         svg.select(".yaxis")
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
-            .call(y_axis);
-
+            .call(y_axis)
+            .selectAll("text")
+            .style("fill", "white")
 
         const line = d3.line()
             .x(d => { return xscl(parseTime(d.x)); })
             .y(d => { return yscl(d.y); })
             .curve(d3.curveMonotoneX);
-
-        // svg.selectAll('.line')
-        //     .data([data])
-        //     .enter().append('.line')
-        //         .transition()
-        //         .ease(d3.easeExp)
-        //         .duration(2000)
-        //         .attr("class", "line")
-        //         .attr("d", line);
 
         svg.selectAll('.line')
             .data([data])
@@ -188,12 +196,6 @@ export default class Chart{
                 .duration(2000)
                 .attr("class", "line")
                 .attr("d", line);
-
-        // svg.selectAll('.line')
-        //     .data([data])
-        //         .exit().remove()
-        
-
 
         svg.select(".good-line")
             .transition()
@@ -258,24 +260,24 @@ export default class Chart{
                         } else if (d.y <= -5) {
                             return "red"
                         } else {
-                            return "black"
+                            return "white"
                         }
                     })
                     .style("opacity", function(d){
                         if (d.y >= 5) {
-                            return "0.7"
+                            return "0.5"
                         } else if (d.y <= -5) {
-                            return "0.7"
+                            return "0.5"
                         } else {
-                            return "0.2"
+                            return "0.3"
                         }
                     })
                 d3.select(this)
-                    .style("opacity", 0.9)
-                    .style("fill", "blue");
+                    .style("opacity", 1)
+                    .style("fill", "lightblue");
                 singleArticleInfo.transition()
                     .duration(200)
-                    .style("opacity", 0.9);
+                    .style("opacity", 1);
                 singleArticleInfo.select(".article-title")
                     .html(
                         `${d.title}`
@@ -297,43 +299,6 @@ export default class Chart{
                         `${d.description}`
                     );
             })
-            // .on("mouseout", function (d) {
-                // d3.select(this)
-                //     .style("fill", () => {
-                //         if (d.y >= 5) {
-                //             return "green"
-                //         } else if (d.y <= -5) {
-                //             return "red"
-                //         } else {
-                //             return "black"
-                //         }
-                //     });
-            // })
-
-        const updateDots = svg.selectAll(".dot")
-            .data(scatterData)
-            // .on("click", d => {
-            //     window.open(d.url, "_blank")
-            // })
-            // .on("mouseover", d => {
-            //     div.transition()
-            //     .duration(200)
-            //     .style("opacity", 0.9);
-            //     div.html(
-            //         `${d.title} ` + "<br />" +
-            //         `by: ${d.author}` + "<br />" +
-            //         `Sentiment Score: ${d.y}` + "<br />" +
-            //         `Relevance: ${d.relevance}` + "<br />" +
-            //         `Description: ${d.description}`
-            //     )
-            //         .style("left", (d3.event.pageX) + "px")
-            //         .style("top", (d3.event.pageY - 28) + "px");	
-            // })
-            // .on("mouseout", function (d) {
-            //     div.transition()
-            //         .duration(500)
-            //         // .style("opacity", 0);
-            // })
 
         createDots
             .transition()
@@ -345,11 +310,11 @@ export default class Chart{
             .attr("id", (d,i) => {return "dot_" + i})
             .style("opacity", d => {
                 if (d.y >= 5) {
-                    return "0.7"
+                    return "0.5"
                 } else if (d.y <= -5) {
-                    return "0.7"
+                    return "0.5"
                 } else {
-                    return "0.2"
+                    return "0.3"
                 }
             })
             .style("fill", d => {
@@ -358,9 +323,13 @@ export default class Chart{
                 } else if (d.y <= -5) {
                     return "red"
                 } else {
-                    return "black"
+                    return "white"
                 }
             });
+
+
+        const updateDots = svg.selectAll(".dot")
+            .data(scatterData)
 
         updateDots
             .transition()
@@ -372,11 +341,11 @@ export default class Chart{
             .attr("r", d => { return 40 * d.relevance })
             .style("opacity", d => {
                 if (d.y >= 5) {
-                    return "0.7"
+                    return "0.5"
                 } else if (d.y <= -5) {
-                    return "0.7"
+                    return "0.5"
                 } else {
-                    return "0.2"
+                    return "0.3"
                 }
             })
             .style("fill", d => {
@@ -385,7 +354,7 @@ export default class Chart{
                 } else if (d.y <= -5) {
                     return "red"
                 } else {
-                    return "black"
+                    return "white"
                 }
             });
 
