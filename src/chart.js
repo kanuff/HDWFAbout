@@ -278,7 +278,7 @@ export default class Chart{
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
             .enter().append("circle")
-            .attr("class", "dot");
+            .attr("class", "dot")
             
         createDots
             .on("click", d => {
@@ -329,14 +329,23 @@ export default class Chart{
                     );
             })
 
+        let bigDot;
         createDots
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", d => {return 40 * d.relevance})
-            .attr("id", (d,i) => {return "dot_" + i})
+            .attr("r", (d,i) => {
+                if (d.title === total.highScore.title) {
+                    bigDot = "dot_" + i
+                    return 1
+                }
+                return 40 * d.relevance
+            })
+            .attr("id", (d,i) => {
+                return "dot_" + i
+            })
             .style("opacity", d => {
                 if (d.y >= 5) {
                     return "0.5"
@@ -356,7 +365,6 @@ export default class Chart{
                 }
             });
 
-
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)
                 // .each( function(d) {
@@ -371,7 +379,43 @@ export default class Chart{
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", d => { return 40 * d.relevance })
+            .attr("r", function(d, i){
+                if (d.title === total.highScore.title) {
+                    bigDot = "dot_" + i
+                    setTimeout(() => {
+                        const pulsar = d3.select(this)
+                        pulsar
+                            .transition()
+                            .ease(d3.easeElastic)
+                            .duration(2000)
+                            .attr("r", 40 * d.relevance)
+                            .style("fill", "lightblue" )
+                            .style("opacity", 1);
+                        singleArticleInfo.select(".article-title")
+                            .html(
+                                `${d.title}`
+                            );
+                        singleArticleInfo.select(".article-author")
+                            .html(
+                                `${d.author}`
+                            );
+                        singleArticleInfo.select(".article-sentiment")
+                            .html(
+                                `${d.y}`
+                            );
+                        singleArticleInfo.select(".article-relevance")
+                            .html(
+                                `${d.relevance}`
+                            );
+                        singleArticleInfo.select(".article-description")
+                            .html(
+                                `${d.description}`
+                            );
+                    }, 2200)
+                    return 100 * d.relevance
+                }
+                return 40 * d.relevance
+            })
             .style("opacity", d => {
                 if (d.y >= 5) {
                     return "0.5"
@@ -394,5 +438,16 @@ export default class Chart{
         svg.selectAll(".dot")
             .data(scatterData)
             .exit().remove();
+        
+        // setTimeout(() => {
+        //     console.log("ENTERED TIMEOUT")
+        //     const pulsar = d3.select(`#${bigDot}`)
+        //     console.log(bigDot)
+        //     pulsar
+        //         .transition()
+        //         .ease(d3.easeElastic)
+        //         .duration(2000)
+        //         .attr("r", 20)
+        // }, 2000)
     }
 }
