@@ -81,7 +81,7 @@ export default class Chart{
         svg.append('path')
                 .attr("fill", "none")
                 .attr("stroke", "whitesmoke")
-                .attr("stroke-width", "2px")
+                .attr("stroke-width", "1.5px")
             .data([data])
                 .attr("class", "line")
                 .attr("d", line);
@@ -98,15 +98,32 @@ export default class Chart{
             .style("stroke-dasharray", ("3, 3"))
 
         svg.append("line")
-            .attr("x1", 0)
-            .attr("y1", yscl(5))
-            .attr("x2", width)
-            .attr("y2", yscl(5))
-            .attr("fill", "none")
-            .attr("stroke", "green")
-            .attr("stroke-width", "1px")
-            .attr("class", "good-line")
-            .style("stroke-dasharray", ("3, 3"))
+                .attr("x1", 0)
+                .attr("y1", yscl(5))
+                .attr("x2", width)
+                .attr("y2", yscl(5))
+                .attr("fill", "none")
+                .attr("stroke", "green")
+                .attr("stroke-width", "1px")
+                .attr("class", "good-line")
+                .style("stroke-dasharray", ("3, 3"));
+
+        svg.append("text")
+            .attr("y", yscl(5) - 5 )
+            .attr("x", width-100)
+            .attr("class", "good-label")
+            .attr("text-anchor", "right")
+            .style("fill", "rgba(0, 128, 0, 0.6)")
+            .text("+ sentiment")
+
+        svg.append("text")
+            .attr("y", yscl(-5) + 15 )
+            .attr("x", width-100)
+            .attr("class", "bad-label")
+            .attr("text-anchor", "right")
+            .style("fill", "rgba(200, 0, 0, 0.6)")
+            .text("- sentiment")
+        
     }
 
 
@@ -120,7 +137,7 @@ export default class Chart{
         const xdata = []
         const height = this.height
         const width = this.width
-        console.log(d3.select(".chart-title"))
+
         console.log(total)
         d3.select(".chart-title")
             .data([total])
@@ -176,6 +193,33 @@ export default class Chart{
                 .style("text-anchor", "start")
                 .style("fill", "white")
 
+        svg.select(".good-label")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("y", yscl(5) - 5)
+            .attr("x", width - 100)
+            .attr("display", () => {
+                if (yscl(5) < 0) {
+                    return "none"
+                } else {
+                    return "inherit"
+                }
+            })
+        svg.select(".bad-label")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(2000)
+            .attr("y", yscl(-5) + 15)
+            .attr("x", width - 100)
+            .attr("display", () => {
+                if (yscl(-5) > height) {
+                    return "none"
+                } else {
+                    return "inherit"
+                }
+            })
+
         svg.select(".yaxis")
             .transition()
             .ease(d3.easeExp)
@@ -229,19 +273,7 @@ export default class Chart{
                 }
             } )
 
-        // const main = d3.select("#main")
-        // let startDate = parseTime(d3.min(xdata))
-        // let endDate = parseTime(d3.max(xdata))
-
-
-        // main.append("div")
-        //     .html(
-        //     // `${startDate.getDay()}` + "-" +
-        //         "...Between " +
-        //         `${startDate.toLocaleString('default', { month: 'short' })}` + " And " +
-        //         `${endDate.toLocaleString('default', { month: 'short' })}`
-        //     )
-        //     .attr("class","date")
+        
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
@@ -275,9 +307,6 @@ export default class Chart{
                 d3.select(this)
                     .style("opacity", 1)
                     .style("fill", "lightblue");
-                singleArticleInfo.transition()
-                    .duration(200)
-                    .style("opacity", 1);
                 singleArticleInfo.select(".article-title")
                     .html(
                         `${d.title}`
@@ -330,6 +359,10 @@ export default class Chart{
 
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)
+                // .each( function(d) {
+                //     d3.select(this)
+                //     .attr("class", "iwasselected")
+                // })
 
         updateDots
             .transition()

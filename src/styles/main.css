@@ -1,12 +1,12 @@
 
 :root{
 	--title-font: Georgia, 'Times New Roman', Times, serif;
-	--title-font-size: 17px;
+	--title-font-size: 23px;
 	--title-font-weight: 600;
 }
 
 html {
-	background-color: rgba(0,0,0,0.9);
+	background-color: rgba(0,0,0,0.8);
 }
 
 html * {
@@ -73,8 +73,9 @@ svg {
 }
 
 .article-info{
-	height: 68vh;
-	background-color: transparent;
+	height: 70.6vh;
+	margin-right: 5px;
+	background-color: rgba(255,255,255, 0.1);
 	border-radius: 4px;
 	width: 350px;
 	padding: 10px;
@@ -99,14 +100,17 @@ svg {
 	padding-right: 8px;
 	padding-bottom: 8px;
 	font-weight: 600;
-	font-size: var(--title-font-size);
+	font-size: 17px;
 	text-decoration: underline;
+	color: rgba(255,255,255, 0.7)
 }
 
 .info {
 	line-height: 175%;
 	padding-bottom: 8px;
 	margin-top: -4px;
+	color: rgba(255,255,255, 0.5);
+	font-size: 17px;
 }
 
 .debug {

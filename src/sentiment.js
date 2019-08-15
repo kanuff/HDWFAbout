@@ -18,10 +18,11 @@ export const processData = ({articles, value}) => {
         const contentSentiment = sentiment.analyze(datum.content)
         const titleSentiment = sentiment.analyze(datum.title)
         
-        const comparative = contentSentiment.comparative < 0.08 ? Math.abs(contentSentiment.comparative)/0.75 : contentSentiment.comparative //THIS IS ONLY A PLACEHOLDER, update to more rigorous value later
+        const comparative = contentSentiment.comparative < 0.08 ? Math.abs(contentSentiment.comparative)/0.75 : contentSentiment.comparative //THIS IS ONLY A PLACEHOLDER, update to more meaningfully accurate metric after basics
         datum.relevance = Math.round(comparative * 1000)/1000
         datum.x = article.publishedAt.split("T")[0]
-        datum.y = (datum.relevance/0.25) * (Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000);
+        const score = (datum.relevance/0.25) * (Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000);
+        datum.y = Math.round(score * 1000)/1000
         processingData.push(datum)
     })
     payload.scatterData = processingData;
@@ -33,9 +34,11 @@ export const processData = ({articles, value}) => {
 
 const calculateTotals = data => {
     const total = {}
+    total.highScore = data[0];
     data.forEach(datum => {
         total.score = total.score ? total.score + datum.y : datum.y
         total.count = total.count ? total.count + 1 : 1
+        total.highScore = Math.abs(datum.y) > Math.abs(total.highScore.y) ? datum : total.highScore
     })
     total.average = total.score/total.count;
     return total
@@ -51,7 +54,7 @@ const averageDayScores = data => {
 
     const averagedData = []
     Object.keys(processedData).forEach(date => {
-        averagedData.push({ x: date, y: processedData[date] / count[date]});
+        averagedData.push({ x: date, y: Math.round((processedData[date] / count[date]) * 1000) / 1000});
     })
     
     const sortedAveragedData = averagedData.sort(sortDate)
