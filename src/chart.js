@@ -9,12 +9,12 @@ export default class Chart{
             bottom: 70,
             left: 40,
         }
-        this.width = 600 - this.margin.left - this.margin.right;
-        this.height = 400 - this.margin.top - this.margin.bottom;
+        this.width = 900 - this.margin.left - this.margin.right;
+        this.height = 500 - this.margin.top - this.margin.bottom;
         this.svg = d3.select('svg')
             .attr('width', this.width + this.margin.left + this.margin.right)
             .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .style('background-color', 'lightblue')
+            .style('background-color', 'whitesmoke')
             .append("g")
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
     }
@@ -32,6 +32,12 @@ export default class Chart{
     }
 
     build(data){
+        // d3.select(".info-container").append("div")
+        //     .attr("class", "article-info")
+            // .attr("background-color", "blue")
+            // .attr("width", "200px")
+            // .style("opacity", 0);
+    
         const xdata = []
         const ydata = []
         data.forEach(datum => {
@@ -110,6 +116,7 @@ export default class Chart{
     }
 
     render(payload){
+        const div = d3.select(".article-info")
         const data = payload.lineData;
         const scatterData = payload.scatterData;
         const svg = this.svg;
@@ -207,17 +214,15 @@ export default class Chart{
                 }
             } )
 
-        d3.selectAll("tooltip")
-            .attr("position", "absolute")
-            .attr("text-align", "center")
-            .attr("width", "fit-content")
-            .attr("height", "fit-content")
-            .attr("background", "grey")
-            // .attr("z-index", "10")
+        // d3.selectAll("article-info")
+        //     .attr("position", "absolute")
+        //     .attr("text-align", "center")
+        //     .attr("width", "fit-content")
+        //     .attr("height", "fit-content")
+        //     .attr("background", "grey")
+        //     // .attr("z-index", "10")
 
-        const div = d3.select("body").append("div")
-            .attr("class", "tooltip")
-            .style("opacity", 0);
+
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
@@ -229,14 +234,20 @@ export default class Chart{
                 div.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                div.html(d.title + "<br/>")
+                div.html(
+                    `${d.title} ` + "<br />" +
+                        `by: ${d.author}` + "<br />" +
+                    `Sentiment Score: ${d.y}` + "<br />" +
+                    `Relevance: ${d.relevance}` + "<br />" +
+                    `Description: ${d.description}`
+                    )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");
             })
             .on("mouseout", function (d) {
                 div.transition()
                     .duration(500)
-                    .style("opacity", 0);
+                    // .style("opacity", 0);
             })
 
         const updateDots = svg.selectAll(".dot")
@@ -248,14 +259,20 @@ export default class Chart{
                 div.transition()
                 .duration(200)
                 .style("opacity", 0.9);
-                div.html(d.title + "<br/>")
+                div.html(
+                    `${d.title} ` + "<br />" +
+                    `by: ${d.author}` + "<br />" +
+                    `Sentiment Score: ${d.y}` + "<br />" +
+                    `Relevance: ${d.relevance}` + "<br />" +
+                    `Description: ${d.description}`
+                )
                     .style("left", (d3.event.pageX) + "px")
                     .style("top", (d3.event.pageY - 28) + "px");	
             })
             .on("mouseout", function (d) {
                 div.transition()
                     .duration(500)
-                    .style("opacity", 0);
+                    // .style("opacity", 0);
             })
 
         createDots
@@ -265,12 +282,12 @@ export default class Chart{
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", 4)
+            .attr("r", d => {return 40 * d.relevance})
             .style("opacity", d => {
                 if (d.y >= 5) {
-                    return "0.8"
+                    return "0.7"
                 } else if (d.y <= -5) {
-                    return "0.8"
+                    return "0.7"
                 } else {
                     return "0.2"
                 }
@@ -292,11 +309,12 @@ export default class Chart{
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
+            .attr("r", d => { return 40 * d.relevance })
             .style("opacity", d => {
                 if (d.y >= 5) {
-                    return "0.8"
+                    return "0.7"
                 } else if (d.y <= -5) {
-                    return "0.8"
+                    return "0.7"
                 } else {
                     return "0.2"
                 }

@@ -2,19 +2,27 @@
 import Sentiment from 'sentiment'
 
 
-export const processData = (data) => {
+export const processData = ({articles, value}) => {
     const payload = {}
     const sentiment = new Sentiment();
-    console.log(data)
     const processingData = [];
-    data.forEach(article => {
+    const ratio = 0.6
+    articles.forEach(article => {
         const datum = {}
-        datum.x = article.publishedAt.split("T")[0]
         datum.content = article.content || ""
-        datum.title = article.title || ""
+        datum.title = article.title || "Unnamed"
+        datum.author = article.author || datum.title
         datum.source = article.source.name
         datum.url = article.url
-        datum.y = (sentiment.analyze(datum.content).score * 0.7) + (sentiment.analyze(datum.title).score * 0.3)
+        datum.description = article.description || "Unavailable";
+        
+        const contentSentiment = sentiment.analyze(datum.content)
+        const titleSentiment = sentiment.analyze(datum.title)
+        
+        datum.x = article.publishedAt.split("T")[0]
+        datum.y = Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000;
+        const comparative = contentSentiment.comparative < 0.08 ? Math.abs(contentSentiment.comparative)/0.75 : contentSentiment.comparative //THIS IS ONLY A PLACEHOLDER, update to more rigorous value later
+        datum.relevance = Math.round(comparative * 1000)/1000
         processingData.push(datum)
     })
     payload.scatterData = processingData;
