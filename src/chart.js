@@ -86,7 +86,7 @@ export default class Chart{
         // draw the line
         svg.append('path')
                 .attr("fill", "none")
-                .attr("stroke", "red")
+                .attr("stroke", "black")
                 .attr("stroke-width", "2px")
             .data([data])
                 .attr("class", "line")
@@ -119,7 +119,7 @@ export default class Chart{
         const div = d3.select(".article-info")
         const data = payload.lineData;
         const scatterData = payload.scatterData;
-        const svg = this.svg;
+        let svg = this.svg;
         const ydata = []
         const xdata = []
         const height = this.height
@@ -171,16 +171,28 @@ export default class Chart{
             .y(d => { return yscl(d.y); })
             .curve(d3.curveMonotoneX);
 
+        // svg.selectAll('.line')
+        //     .data([data])
+        //     .enter().append('.line')
+        //         .transition()
+        //         .ease(d3.easeExp)
+        //         .duration(2000)
+        //         .attr("class", "line")
+        //         .attr("d", line);
+
         svg.selectAll('.line')
-                .attr("fill", "none")
-                .attr("stroke", "black")
-                .attr("stroke-width", "2px")
             .data([data])
-                .attr("class", "line")
                 .transition()
                 .ease(d3.easeExp)
                 .duration(2000)
+                .attr("class", "line")
                 .attr("d", line);
+
+        // svg.selectAll('.line')
+        //     .data([data])
+        //         .exit().remove()
+        
+
 
         svg.select(".good-line")
             .transition()

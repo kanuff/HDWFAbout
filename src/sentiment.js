@@ -19,10 +19,11 @@ export const processData = ({articles, value}) => {
         const contentSentiment = sentiment.analyze(datum.content)
         const titleSentiment = sentiment.analyze(datum.title)
         
-        datum.x = article.publishedAt.split("T")[0]
-        datum.y = Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000;
         const comparative = contentSentiment.comparative < 0.08 ? Math.abs(contentSentiment.comparative)/0.75 : contentSentiment.comparative //THIS IS ONLY A PLACEHOLDER, update to more rigorous value later
         datum.relevance = Math.round(comparative * 1000)/1000
+        datum.x = article.publishedAt.split("T")[0]
+        datum.y = (datum.relevance/0.25) * (Math.round(((contentSentiment.score * ratio) + (titleSentiment.score * (1-ratio))) * 1000) /1000);
+
         processingData.push(datum)
     })
     payload.scatterData = processingData;
