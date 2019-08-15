@@ -23,6 +23,7 @@ body > div {
 	display: flex;
 	margin: 0 auto;
 	justify-content: center;
+	padding: 10px;
 }
 
 /* body > * {
@@ -31,7 +32,7 @@ body > div {
 
 
 body{
-	padding: 25px;
+	padding: 15px;
 }
 
 .title {
@@ -56,22 +57,98 @@ body{
 	border-bottom: 1px solid black;
 }
 
-.article-info{
-	background-color: lightgrey;
+svg {
+	padding: 15px;
+	border-radius: 4px;
 }
+
 
 .info-container {
 	display: flex;
+	background-color: lightgrey;
+	border-radius: 4px;
 }
 
 .article-info{
-	width: 300px;
-	max-width: 300px;
-	padding: 20px;
+	height: 68vh;
+	background-color: lightgrey;
+	border-radius: 4px;
+	width: 350px;
+	/* max-width: 300px;
+	min-width: 300px; */
+	padding: 10px;
 	border-radius: 4px;
 	overflow: hidden;
 }
 
+.article-title {
+	padding-bottom: 8px;
+}
+
+.article-title-container{
+	max-height: 115px;
+	overflow: hidden;
+}
+
+.flex-row {
+	display: flex;
+}
+
+.label {
+	padding-right: 8px;
+	padding-bottom: 8px;
+	font-weight: 600;
+	font-size: var(--title-font-size);
+	text-decoration: underline;
+}
+
+.info {
+	line-height: 175%;
+	padding-bottom: 8px;
+	margin-top: -4px;
+}
+
+.debug {
+	border: 1px solid red;
+}
+
+.articles-container{
+	overflow: scroll;
+	height: 40%;
+}
+
+.article-info-container{
+	padding-bottom: 15px;
+	height: 55%;
+	overflow: scroll;
+	/* box-shadow: inset 1px 1px 1px 1px rgba(0, 0, 0, 0.212); */
+}
+
+.article-info-container::-webkit-scrollbar {
+	width: 6px;
+	border-radius: 6px;
+}
+.article-info-container::-webkit-scrollbar-corner {
+	background: rgba(0,0,0,0);
+	height: 1px;
+}
+.article-info-container::-webkit-scrollbar-track-piece{
+    border-radius: 6px;
+	background: transparent;
+}
+.article-info-container::-webkit-scrollbar-thumb{
+	background: rgba(104, 104, 104, 0.822);
+	border-radius: 6px;
+}
+
 .dot{
 	cursor: pointer;
+}
+
+.dot {
+  -webkit-transition: fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -moz-transition:    fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -ms-transition:     fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -o-transition:      fill 0.15s, opacity 0.15s, background-color 0.1s;
+  transition:         fill 0.15s, opacity 0.15s, background-color 0.1s;
 }

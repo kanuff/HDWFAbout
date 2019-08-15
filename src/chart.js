@@ -5,9 +5,9 @@ export default class Chart{
         this.data = props.data
         this.margin = {
             top: 50,
-            right: 25,
+            right: 50,
             bottom: 70,
-            left: 40,
+            left: 20,
         }
         this.width = 900 - this.margin.left - this.margin.right;
         this.height = 500 - this.margin.top - this.margin.bottom;
@@ -32,12 +32,6 @@ export default class Chart{
     }
 
     build(data){
-        // d3.select(".info-container").append("div")
-        //     .attr("class", "article-info")
-            // .attr("background-color", "blue")
-            // .attr("width", "200px")
-            // .style("opacity", 0);
-    
         const xdata = []
         const ydata = []
         data.forEach(datum => {
@@ -116,7 +110,6 @@ export default class Chart{
     }
 
     render(payload){
-        const div = d3.select(".article-info")
         const data = payload.lineData;
         const scatterData = payload.scatterData;
         let svg = this.svg;
@@ -125,13 +118,15 @@ export default class Chart{
         const height = this.height
         const width = this.width
 
+        const singleArticleInfo = d3.select(".article-info-container")
+
         scatterData.forEach(datum => {
             ydata.push(datum.y)
             xdata.push(datum.x)
         })
 
         const parseTime = d3.timeParse("%Y-%m-%d")
-        const xFormat = "%Y-%m-%d";
+        const xFormat = "%b-%d";
         const xscl = d3.scaleTime()
             .domain(d3.extent(data, d => { return parseTime(d.x) }))
             .range([0, width]);
@@ -147,17 +142,23 @@ export default class Chart{
             .scale(yscl)
 
         svg.select(".xaxis")
-            .transition()
-            .ease(d3.easeExp)
-            .duration(2000)
+                .transition()
+                .ease(d3.easeExp)
+                .duration(2000)
             .attr("transform", `translate(0,${yscl(0)})`)
+            // .transition()
+            // .ease(d3.easeExp)
+            // .duration(2000)
             .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
             .selectAll("text")
-            .attr("y", 0)
-            .attr("x", 9)
-            .attr("dy", ".35em")
-            .attr("transform", "rotate(90)")
-            .style("text-anchor", "start");
+                // .transition()
+                // .ease(d3.easeExp)
+                // .duration(2000)
+                .attr("y", 0)
+                .attr("x", 9)
+                .attr("dy", ".35em")
+                .attr("transform", "rotate(90)")
+                .style("text-anchor", "start");
 
         svg.select(".yaxis")
             .transition()
@@ -226,75 +227,122 @@ export default class Chart{
                 }
             } )
 
-        // d3.selectAll("article-info")
-        //     .attr("position", "absolute")
-        //     .attr("text-align", "center")
-        //     .attr("width", "fit-content")
-        //     .attr("height", "fit-content")
-        //     .attr("background", "grey")
-        //     // .attr("z-index", "10")
+        // const main = d3.select("#main")
+        // let startDate = parseTime(d3.min(xdata))
+        // let endDate = parseTime(d3.max(xdata))
 
 
+        // main.append("div")
+        //     .html(
+        //     // `${startDate.getDay()}` + "-" +
+        //         "...Between " +
+        //         `${startDate.toLocaleString('default', { month: 'short' })}` + " And " +
+        //         `${endDate.toLocaleString('default', { month: 'short' })}`
+        //     )
+        //     .attr("class","date")
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
             .enter().append("circle")
+            .attr("class", "dot");
+            
+        createDots
             .on("click", d => {
                 window.open(d.url, "_blank")
             })
-            .on("mouseover", d => {
-                div.transition()
+            .on("mouseover", function(d) {
+                d3.selectAll(".dot")
+                    .style("fill", function(d){
+                        if (d.y >= 5) {
+                            return "green"
+                        } else if (d.y <= -5) {
+                            return "red"
+                        } else {
+                            return "black"
+                        }
+                    })
+                    .style("opacity", function(d){
+                        if (d.y >= 5) {
+                            return "0.7"
+                        } else if (d.y <= -5) {
+                            return "0.7"
+                        } else {
+                            return "0.2"
+                        }
+                    })
+                d3.select(this)
+                    .style("opacity", 0.9)
+                    .style("fill", "blue");
+                singleArticleInfo.transition()
                     .duration(200)
                     .style("opacity", 0.9);
-                div.html(
-                    `${d.title} ` + "<br />" +
-                        `by: ${d.author}` + "<br />" +
-                    `Sentiment Score: ${d.y}` + "<br />" +
-                    `Relevance: ${d.relevance}` + "<br />" +
-                    `Description: ${d.description}`
-                    )
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");
+                singleArticleInfo.select(".article-title")
+                    .html(
+                        `${d.title}`
+                    );
+                singleArticleInfo.select(".article-author")
+                    .html(
+                        `${d.author}`
+                    );
+                singleArticleInfo.select(".article-sentiment")
+                    .html(
+                        `${d.y}`
+                    );
+                singleArticleInfo.select(".article-relevance")
+                    .html(
+                        `${d.relevance}`
+                    );
+                singleArticleInfo.select(".article-description")
+                    .html(
+                        `${d.description}`
+                    );
             })
-            .on("mouseout", function (d) {
-                div.transition()
-                    .duration(500)
-                    // .style("opacity", 0);
-            })
+            // .on("mouseout", function (d) {
+                // d3.select(this)
+                //     .style("fill", () => {
+                //         if (d.y >= 5) {
+                //             return "green"
+                //         } else if (d.y <= -5) {
+                //             return "red"
+                //         } else {
+                //             return "black"
+                //         }
+                //     });
+            // })
 
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)
-            .on("click", d => {
-                window.open(d.url, "_blank")
-            })
-            .on("mouseover", d => {
-                div.transition()
-                .duration(200)
-                .style("opacity", 0.9);
-                div.html(
-                    `${d.title} ` + "<br />" +
-                    `by: ${d.author}` + "<br />" +
-                    `Sentiment Score: ${d.y}` + "<br />" +
-                    `Relevance: ${d.relevance}` + "<br />" +
-                    `Description: ${d.description}`
-                )
-                    .style("left", (d3.event.pageX) + "px")
-                    .style("top", (d3.event.pageY - 28) + "px");	
-            })
-            .on("mouseout", function (d) {
-                div.transition()
-                    .duration(500)
-                    // .style("opacity", 0);
-            })
+            // .on("click", d => {
+            //     window.open(d.url, "_blank")
+            // })
+            // .on("mouseover", d => {
+            //     div.transition()
+            //     .duration(200)
+            //     .style("opacity", 0.9);
+            //     div.html(
+            //         `${d.title} ` + "<br />" +
+            //         `by: ${d.author}` + "<br />" +
+            //         `Sentiment Score: ${d.y}` + "<br />" +
+            //         `Relevance: ${d.relevance}` + "<br />" +
+            //         `Description: ${d.description}`
+            //     )
+            //         .style("left", (d3.event.pageX) + "px")
+            //         .style("top", (d3.event.pageY - 28) + "px");	
+            // })
+            // .on("mouseout", function (d) {
+            //     div.transition()
+            //         .duration(500)
+            //         // .style("opacity", 0);
+            // })
 
         createDots
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
-            .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
             .attr("r", d => {return 40 * d.relevance})
+            .attr("id", (d,i) => {return "dot_" + i})
             .style("opacity", d => {
                 if (d.y >= 5) {
                     return "0.7"

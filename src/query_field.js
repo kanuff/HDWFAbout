@@ -51,7 +51,7 @@ const handleTyping = (event,props, queryInput) => {
             payload.articles = response.articles
             return payload
         })
-        .then(payload => processData(payload)) // should return array of objects, x is datetime, y is sentiment score
+        .then(payload => processData(payload)) 
         .then((payload) => {
             console.log("Rerendering");
             chart.render(payload)
@@ -59,7 +59,7 @@ const handleTyping = (event,props, queryInput) => {
 }
 
 
-// Use for testing, pulled sourced from: https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
+// Use for testing, sourced from: https://codeburst.io/throttling-and-debouncing-in-javascript-646d076d0a44
 const debounce = (delay, fn) => {
     let timerId;
     return function (...args) {
