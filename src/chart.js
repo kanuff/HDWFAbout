@@ -9,6 +9,9 @@ export default class Chart{
             bottom: 70,
             left: 20,
         }
+        this.cutoff = 3
+        this.good = this.cutoff
+        this.bad = this.cutoff * -1
         this.width = 900 - this.margin.left - this.margin.right;
         this.height = 500 - this.margin.top - this.margin.bottom;
         this.svg = d3.select('svg')
@@ -40,7 +43,8 @@ export default class Chart{
         })
         const width = this.width
         const height = this.height
-        const margin = this.margin
+        const good = this.good
+        const bad = this.bad
 
         //create the chart object
         const svg = this.svg
@@ -88,9 +92,9 @@ export default class Chart{
 
         svg.append("line")
             .attr("x1", 0)
-            .attr("y1", yscl(-5))
+            .attr("y1", yscl(bad))
             .attr("x2", width)
-            .attr("y2", yscl(-5))
+            .attr("y2", yscl(bad))
             .attr("fill", "none")
             .attr("stroke", "red")
             .attr("stroke-width", "1px")
@@ -99,9 +103,9 @@ export default class Chart{
 
         svg.append("line")
                 .attr("x1", 0)
-                .attr("y1", yscl(5))
+                .attr("y1", yscl(good))
                 .attr("x2", width)
-                .attr("y2", yscl(5))
+                .attr("y2", yscl(good))
                 .attr("fill", "none")
                 .attr("stroke", "green")
                 .attr("stroke-width", "1px")
@@ -109,7 +113,7 @@ export default class Chart{
                 .style("stroke-dasharray", ("3, 3"));
 
         svg.append("text")
-            .attr("y", yscl(5) - 5 )
+            .attr("y", yscl(good) - 5 )
             .attr("x", width-100)
             .attr("class", "good-label")
             .attr("text-anchor", "right")
@@ -117,7 +121,7 @@ export default class Chart{
             .text("+ sentiment")
 
         svg.append("text")
-            .attr("y", yscl(-5) + 15 )
+            .attr("y", yscl(bad) + 15 )
             .attr("x", width-100)
             .attr("class", "bad-label")
             .attr("text-anchor", "right")
@@ -137,6 +141,8 @@ export default class Chart{
         const xdata = []
         const height = this.height
         const width = this.width
+        const good = this.good
+        const bad = this.bad
 
         console.log(total)
         d3.select(".chart-title")
@@ -197,10 +203,10 @@ export default class Chart{
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
-            .attr("y", yscl(5) - 5)
+            .attr("y", yscl(good) - 5)
             .attr("x", width - 100)
             .attr("display", () => {
-                if (yscl(5) < 0) {
+                if (yscl(good) < 0) {
                     return "none"
                 } else {
                     return "inherit"
@@ -210,10 +216,10 @@ export default class Chart{
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
-            .attr("y", yscl(-5) + 15)
+            .attr("y", yscl(bad) + 15)
             .attr("x", width - 100)
             .attr("display", () => {
-                if (yscl(-5) > height) {
+                if (yscl(bad) > height) {
                     return "none"
                 } else {
                     return "inherit"
@@ -246,11 +252,11 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(2000)
             .attr("x1", 0)
-            .attr("y1", yscl(5))
+            .attr("y1", yscl(good))
             .attr("x2", width)
-            .attr("y2", yscl(5))
+            .attr("y2", yscl(good))
             .attr("display", d => {
-                if (yscl(5) < 0) {
+                if (yscl(good) < 0) {
                     return "none"
                 } else {
                     return "inherit"
@@ -262,11 +268,11 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(2000)
             .attr("x1", 0)
-            .attr("y1", yscl(-5) )
+            .attr("y1", yscl(bad) )
             .attr("x2", width)
-            .attr("y2", yscl(-5))
+            .attr("y2", yscl(bad))
             .attr("display", d => {
-                if (yscl(-5) > height) {
+                if (yscl(bad) > height) {
                     return "none"
                 } else {
                     return "inherit"
@@ -287,18 +293,18 @@ export default class Chart{
             .on("mouseover", function(d) {
                 d3.selectAll(".dot")
                     .style("fill", function(d){
-                        if (d.y >= 5) {
+                        if (d.y >= good) {
                             return "green"
-                        } else if (d.y <= -5) {
+                        } else if (d.y <= bad) {
                             return "red"
                         } else {
                             return "white"
                         }
                     })
                     .style("opacity", function(d){
-                        if (d.y >= 5) {
+                        if (d.y >= good) {
                             return "0.5"
-                        } else if (d.y <= -5) {
+                        } else if (d.y <= bad) {
                             return "0.5"
                         } else {
                             return "0.3"
@@ -347,18 +353,18 @@ export default class Chart{
                 return "dot_" + i
             })
             .style("opacity", d => {
-                if (d.y >= 5) {
+                if (d.y >= good) {
                     return "0.5"
-                } else if (d.y <= -5) {
+                } else if (d.y <= bad) {
                     return "0.5"
                 } else {
                     return "0.3"
                 }
             })
             .style("fill", d => {
-                if (d.y >= 5) {
+                if (d.y >= good) {
                     return "green"
-                } else if (d.y <= -5) {
+                } else if (d.y <= bad) {
                     return "red"
                 } else {
                     return "white"
@@ -383,52 +389,63 @@ export default class Chart{
                 if (d.title === total.highScore.title) {
                     bigDot = "dot_" + i
                     setTimeout(() => {
-                        const pulsar = d3.select(this)
-                        pulsar
+                        d3.select(this)
                             .transition()
                             .ease(d3.easeElastic)
-                            .duration(2000)
+                            .duration(2500)
                             .attr("r", 40 * d.relevance)
                             .style("fill", "lightblue" )
                             .style("opacity", 1);
-                        singleArticleInfo.select(".article-title")
-                            .html(
-                                `${d.title}`
-                            );
-                        singleArticleInfo.select(".article-author")
-                            .html(
-                                `${d.author}`
-                            );
-                        singleArticleInfo.select(".article-sentiment")
-                            .html(
-                                `${d.y}`
-                            );
-                        singleArticleInfo.select(".article-relevance")
-                            .html(
-                                `${d.relevance}`
-                            );
-                        singleArticleInfo.select(".article-description")
-                            .html(
-                                `${d.description}`
-                            );
-                    }, 2200)
+                        setTimeout(() =>{
+                            singleArticleInfo.select(".article-title")
+                                .html(
+                                    `${d.title}`
+                                );
+                            singleArticleInfo.select(".article-author")
+                                .html(
+                                    `${d.author}`
+                                );
+                            singleArticleInfo.select(".article-sentiment")
+                                .html(
+                                    `${d.y}`
+                                );
+                            singleArticleInfo.select(".article-relevance")
+                                .html(
+                                    `${d.relevance}`
+                                );
+                            singleArticleInfo.select(".article-description")
+                                .html(
+                                    `${d.description}`
+                                );
+                            singleArticleInfo
+                                // .transition()
+                                // .ease(d3.easeLinear)
+                                // .duration(500)
+                                .style("background-color", "rgba(255,255,255,0.3)")
+                            setTimeout(() => {
+                                singleArticleInfo
+                                    .style("background-color", "transparent")  
+                            }, 500)
+                        }, 800)
+                        
+                    }, 1800)
                     return 100 * d.relevance
                 }
                 return 40 * d.relevance
             })
             .style("opacity", d => {
-                if (d.y >= 5) {
+                if (d.y >= good) {
                     return "0.5"
-                } else if (d.y <= -5) {
+                } else if (d.y <= bad) {
                     return "0.5"
                 } else {
                     return "0.3"
                 }
             })
             .style("fill", d => {
-                if (d.y >= 5) {
+                if (d.y >= good) {
                     return "green"
-                } else if (d.y <= -5) {
+                } else if (d.y <= bad) {
                     return "red"
                 } else {
                     return "white"

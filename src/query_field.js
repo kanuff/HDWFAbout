@@ -73,5 +73,5 @@ const debounce = (delay, fn) => {
     }
 }
 
-const debouncedTyping = debounce(1000, handleTyping);
+const debouncedTyping = debounce(700, handleTyping);
 

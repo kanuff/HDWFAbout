@@ -63,6 +63,7 @@ body{
 svg {
 	padding: 15px;
 	border-radius: 4px;
+	box-shadow: black 1px 1px 5px 0px;
 }
 
 
@@ -81,6 +82,7 @@ svg {
 	padding: 10px;
 	border-radius: 4px;
 	overflow: hidden;
+	box-shadow: black 1px 1px 5px 0px;
 }
 
 .article-title {
@@ -124,10 +126,17 @@ svg {
 }
 
 .article-info-container{
-	padding-bottom: 15px;
 	height: 55%;
 	overflow-y: scroll;
 	overflow-x: hidden;
+	-webkit-transition: fill 0.15s, opacity 0.15s, background-color 1s;
+	-moz-transition:    fill 0.15s, opacity 0.15s, background-color 1s;
+	-ms-transition:     fill 0.15s, opacity 0.15s, background-color 1s;
+	-o-transition:      fill 0.15s, opacity 0.15s, background-color 1s;
+	transition:         fill 0.15s, opacity 0.15s, background-color 1s;
+	border-radius: 4px;
+	padding: 8.5px;
+	padding-bottom: 15px;
 }
 
 .article-info-container::-webkit-scrollbar {
@@ -152,12 +161,23 @@ svg {
 }
 
 .dot {
-  -webkit-transition: fill 0.15s, opacity 0.15s, background-color 0.1s;
-  -moz-transition:    fill 0.15s, opacity 0.15s, background-color 0.1s;
-  -ms-transition:     fill 0.15s, opacity 0.15s, background-color 0.1s;
-  -o-transition:      fill 0.15s, opacity 0.15s, background-color 0.1s;
-  transition:         fill 0.15s, opacity 0.15s, background-color 0.1s;
+  -webkit-transition: fill 0.15s, opacity 0.15s, background-color 1s;
+  -moz-transition:    fill 0.15s, opacity 0.15s, background-color 1s;
+  -ms-transition:     fill 0.15s, opacity 0.15s, background-color 1s;
+  -o-transition:      fill 0.15s, opacity 0.15s, background-color 1s;
+  transition:         fill 0.15s, opacity 0.15s, background-color 1s;
 }
+
+footer{
+	text-align: right;
+}
+
+/* .good-label, .bad-label{
+	letter-spacing: 0.07em;
+	margin-left: -25px;
+	padding-right: 15px;
+} */
+
 
 /* path{
 	fill: whitesmoke;
