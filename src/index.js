@@ -29,15 +29,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const dummyData = chart.dummyData();
     chart.build(dummyData);
 
-    const svg = d3.select('svg')
-
-    
-    
-    // setInterval(() => {
-    //     console.log("Rerendering");
-    //     const newData = chart.dummyData()
-    //     chart.render(newData)}, 5000)
-        
     
     
 })

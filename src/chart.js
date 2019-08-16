@@ -1,11 +1,18 @@
-// mimic react style
+import {
+    conditionalColor,
+    conditionalDisplay,
+    conditionalOpacity,
+    conditionalTitleColor,
+    fillArticleInfo,
+    handleDotUX
+} from './chart_utils'
 
 export default class Chart{
     constructor(props){
         this.data = props.data
         this.margin = {
             top: 50,
-            right: 50,
+            right: 80,
             bottom: 70,
             left: 20,
         }
@@ -81,14 +88,32 @@ export default class Chart{
             .y( d => { return yscl(d.y) } )
             .curve(d3.curveMonotoneX);
 
-        // draw the line
-        svg.append('path')
-                .attr("fill", "none")
-                .attr("stroke", "whitesmoke")
-                .attr("stroke-width", "1.5px")
-            .data([data])
-                .attr("class", "line")
-                .attr("d", line);
+        svg.append("text")
+            .attr("y", yscl(good) - 5 )
+            .attr("x", 15)
+            .attr("class", "good-label")
+            .attr("text-anchor", "right")
+            .style("fill", "rgba(0, 128, 0, 0.6)")
+            .text("+ sentiment")
+
+        svg.append("text")
+            .attr("y", yscl(bad) + 15 )
+            .attr("x", 15)
+            .attr("class", "bad-label")
+            .attr("text-anchor", "right")
+            .style("fill", "rgba(200, 0, 0, 0.6)")
+            .text("- sentiment")
+
+        svg.append("line")
+            .attr("x1", 0)
+            .attr("y1", yscl(good))
+            .attr("x2", width)
+            .attr("y2", yscl(good))
+            .attr("fill", "none")
+            .attr("stroke", "green")
+            .attr("stroke-width", "1px")
+            .attr("class", "good-line")
+            .style("stroke-dasharray", ("3, 3"));
 
         svg.append("line")
             .attr("x1", 0)
@@ -101,67 +126,26 @@ export default class Chart{
             .attr("class", "bad-line")
             .style("stroke-dasharray", ("3, 3"))
 
-        svg.append("line")
-                .attr("x1", 0)
-                .attr("y1", yscl(good))
-                .attr("x2", width)
-                .attr("y2", yscl(good))
-                .attr("fill", "none")
-                .attr("stroke", "green")
-                .attr("stroke-width", "1px")
-                .attr("class", "good-line")
-                .style("stroke-dasharray", ("3, 3"));
+        // draw the line
+        svg.append('path')
+            .attr("fill", "none")
+            .attr("stroke", "lightgrey")
+            .attr("stroke-width", "4px")
+            .data([data])
+            .attr("class", "line")
+            .attr("d", line);
 
-        svg.append("text")
-            .attr("y", yscl(good) - 5 )
-            .attr("x", width-100)
-            .attr("class", "good-label")
-            .attr("text-anchor", "right")
-            .style("fill", "rgba(0, 128, 0, 0.6)")
-            .text("+ sentiment")
-
-        svg.append("text")
-            .attr("y", yscl(bad) + 15 )
-            .attr("x", width-100)
-            .attr("class", "bad-label")
-            .attr("text-anchor", "right")
-            .style("fill", "rgba(200, 0, 0, 0.6)")
-            .text("- sentiment")
-        
     }
 
-
-
     render(payload){
-        const data = payload.lineData;
-        const scatterData = payload.scatterData;
-        const total = payload.total
-        let svg = this.svg;
+        const { lineData, scatterData, total } = payload
+        const { svg, height, width, good, bad } = this
         const ydata = []
         const xdata = []
-        const height = this.height
-        const width = this.width
-        const good = this.good
-        const bad = this.bad
-
-        console.log(total)
-        d3.select(".chart-title")
-            .data([total])
-                .transition()
-                .ease(d3.easeExp)
-                .duration(2000)
-                .style("color", d => {
-                    console.log(d3.select("Inside the function"))
-                    if (d.average > 0.13) {
-                        return `rgba(${40 * Math.sqrt(d.average)}, ${128 * Math.sqrt(d.average)}, ${40 * Math.sqrt(d.average)}, 0.97)`
-                    } else if (d.average < -0.13) {
-                        return `rgba(${128 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, 0.97)`
-                    } else {
-                        return `rgba(${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, 0.8)`
-                    }
-                })
-
         const singleArticleInfo = d3.select(".article-info-container")
+
+        conditionalTitleColor(total);
+
 
         scatterData.forEach(datum => {
             ydata.push(datum.y)
@@ -171,13 +155,12 @@ export default class Chart{
         const parseTime = d3.timeParse("%Y-%m-%d")
         const xFormat = "%b-%d";
         const xscl = d3.scaleTime()
-            .domain(d3.extent(data, d => { return parseTime(d.x) }))
+            .domain(d3.extent(lineData, d => { return parseTime(d.x) }))
             .range([0, width]);
 
         const x_axis = d3.axisBottom()
             .scale(xscl)
             
-
         const yscl = d3.scaleLinear()
             .domain([d3.max(ydata), d3.min(ydata)])
             .range([0, height]);
@@ -204,27 +187,16 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(2000)
             .attr("y", yscl(good) - 5)
-            .attr("x", width - 100)
-            .attr("display", () => {
-                if (yscl(good) < 0) {
-                    return "none"
-                } else {
-                    return "inherit"
-                }
-            })
+            .attr("x", 15)
+            .attr("display", () => conditionalDisplay(yscl(good), 0, false))
+
         svg.select(".bad-label")
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
             .attr("y", yscl(bad) + 15)
-            .attr("x", width - 100)
-            .attr("display", () => {
-                if (yscl(bad) > height) {
-                    return "none"
-                } else {
-                    return "inherit"
-                }
-            })
+            .attr("x", 15)
+            .attr("display", () => conditionalDisplay(yscl(bad), height, true))
 
         svg.select(".yaxis")
             .transition()
@@ -240,7 +212,7 @@ export default class Chart{
             .curve(d3.curveMonotoneX);
 
         svg.selectAll('.line')
-            .data([data])
+            .data([lineData])
                 .transition()
                 .ease(d3.easeExp)
                 .duration(2000)
@@ -255,13 +227,7 @@ export default class Chart{
             .attr("y1", yscl(good))
             .attr("x2", width)
             .attr("y2", yscl(good))
-            .attr("display", d => {
-                if (yscl(good) < 0) {
-                    return "none"
-                } else {
-                    return "inherit"
-                }
-            })
+            .attr("display", () => conditionalDisplay(yscl(good), 0, false))
 
         svg.select(".bad-line")
             .transition()
@@ -271,15 +237,8 @@ export default class Chart{
             .attr("y1", yscl(bad) )
             .attr("x2", width)
             .attr("y2", yscl(bad))
-            .attr("display", d => {
-                if (yscl(bad) > height) {
-                    return "none"
-                } else {
-                    return "inherit"
-                }
-            } )
-
-        
+            .attr("display", () => conditionalDisplay(yscl(bad), height, true))
+            
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
@@ -292,92 +251,34 @@ export default class Chart{
             })
             .on("mouseover", function(d) {
                 d3.selectAll(".dot")
-                    .style("fill", function(d){
-                        if (d.y >= good) {
-                            return "green"
-                        } else if (d.y <= bad) {
-                            return "red"
-                        } else {
-                            return "white"
-                        }
-                    })
-                    .style("opacity", function(d){
-                        if (d.y >= good) {
-                            return "0.5"
-                        } else if (d.y <= bad) {
-                            return "0.5"
-                        } else {
-                            return "0.3"
-                        }
-                    })
+                    .style("fill", d => conditionalColor(d, good, bad))
+                    .style("opacity", d => conditionalOpacity(d, good, bad))
                 d3.select(this)
                     .style("opacity", 1)
                     .style("fill", "lightblue");
-                singleArticleInfo.select(".article-title")
-                    .html(
-                        `${d.title}`
-                    );
-                singleArticleInfo.select(".article-author")
-                    .html(
-                        `${d.author}`
-                    );
-                singleArticleInfo.select(".article-sentiment")
-                    .html(
-                        `${d.y}`
-                    );
-                singleArticleInfo.select(".article-relevance")
-                    .html(
-                        `${d.relevance}`
-                    );
-                singleArticleInfo.select(".article-description")
-                    .html(
-                        `${d.description}`
-                    );
+                fillArticleInfo(singleArticleInfo, d)
             })
 
-        let bigDot;
         createDots
             .transition()
             .ease(d3.easeExp)
             .duration(2000)
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", (d,i) => {
+            .attr("r", d => {
                 if (d.title === total.highScore.title) {
-                    bigDot = "dot_" + i
                     return 1
                 }
                 return 40 * d.relevance
             })
-            .attr("id", (d,i) => {
-                return "dot_" + i
-            })
-            .style("opacity", d => {
-                if (d.y >= good) {
-                    return "0.5"
-                } else if (d.y <= bad) {
-                    return "0.5"
-                } else {
-                    return "0.3"
-                }
-            })
-            .style("fill", d => {
-                if (d.y >= good) {
-                    return "green"
-                } else if (d.y <= bad) {
-                    return "red"
-                } else {
-                    return "white"
-                }
-            });
+            .attr("id", (_,i) => {return "dot_" + i})
+            .style("opacity", d => conditionalOpacity(d, good, bad))
+            .style("fill", d => conditionalColor(d, good, bad));
 
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)
-                // .each( function(d) {
-                //     d3.select(this)
-                //     .attr("class", "iwasselected")
-                // })
 
+        let bigDot;
         updateDots
             .transition()
             .ease(d3.easeExp)
@@ -386,85 +287,21 @@ export default class Chart{
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
             .attr("r", function(d, i){
+                let r;
                 if (d.title === total.highScore.title) {
-                    bigDot = "dot_" + i
-                    setTimeout(() => {
-                        d3.select(this)
-                            .transition()
-                            .ease(d3.easeElastic)
-                            .duration(2500)
-                            .attr("r", 40 * d.relevance)
-                            .style("fill", "lightblue" )
-                            .style("opacity", 1);
-                        setTimeout(() =>{
-                            singleArticleInfo.select(".article-title")
-                                .html(
-                                    `${d.title}`
-                                );
-                            singleArticleInfo.select(".article-author")
-                                .html(
-                                    `${d.author}`
-                                );
-                            singleArticleInfo.select(".article-sentiment")
-                                .html(
-                                    `${d.y}`
-                                );
-                            singleArticleInfo.select(".article-relevance")
-                                .html(
-                                    `${d.relevance}`
-                                );
-                            singleArticleInfo.select(".article-description")
-                                .html(
-                                    `${d.description}`
-                                );
-                            singleArticleInfo
-                                // .transition()
-                                // .ease(d3.easeLinear)
-                                // .duration(500)
-                                .style("background-color", "rgba(255,255,255,0.3)")
-                            setTimeout(() => {
-                                singleArticleInfo
-                                    .style("background-color", "transparent")  
-                            }, 500)
-                        }, 800)
-                        
-                    }, 1800)
-                    return 100 * d.relevance
-                }
-                return 40 * d.relevance
-            })
-            .style("opacity", d => {
-                if (d.y >= good) {
-                    return "0.5"
-                } else if (d.y <= bad) {
-                    return "0.5"
+                    bigDot = d3.select(this)
+                    handleDotUX(d, bigDot, singleArticleInfo);
+                    r = 100 * d.relevance
                 } else {
-                    return "0.3"
+                    r = 40 * d.relevance
                 }
+                return r
             })
-            .style("fill", d => {
-                if (d.y >= good) {
-                    return "green"
-                } else if (d.y <= bad) {
-                    return "red"
-                } else {
-                    return "white"
-                }
-            });
+            .style("opacity", d => conditionalOpacity(d, good, bad) )
+            .style("fill", d => conditionalColor(d, good, bad));
 
         svg.selectAll(".dot")
             .data(scatterData)
             .exit().remove();
-        
-        // setTimeout(() => {
-        //     console.log("ENTERED TIMEOUT")
-        //     const pulsar = d3.select(`#${bigDot}`)
-        //     console.log(bigDot)
-        //     pulsar
-        //         .transition()
-        //         .ease(d3.easeElastic)
-        //         .duration(2000)
-        //         .attr("r", 20)
-        // }, 2000)
     }
 }
