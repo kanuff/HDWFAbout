@@ -72,13 +72,14 @@ export default class Chart{
 
     dummyData(){
         const dummyData = []
-        const dataLength = 15;
+        const dataLength = 31;
         const mag = 25;
         for (let x = 0; x < dataLength; x++) {
             const y = Math.floor(Math.random() * 2 * mag) - mag;
-            const datum = {x, y};
+            const datum = {x:Object.keys(this.dateRange[x])[0], y};
             dummyData.push(datum);
         }
+        console.log(dummyData)
         return dummyData
     }
 
@@ -90,26 +91,42 @@ export default class Chart{
             xdata.push(datum.x)
             ydata.push(datum.y)
         })
-        const xscl = d3.scaleLinear()
-            .domain([0, d3.max(xdata)])
+        const parseTime = d3.timeParse("%Y-%m-%d")
+        const xFormat = "%b-%d";
+        const xscl = d3.scaleTime()
+            .domain(d3.extent(data, d => { return parseTime(d.x) }))
             .range([0, width]);
-        this.xscl = xscl
-        
-        const yscl = d3.scaleLinear()
-        .domain([d3.max(ydata), d3.min(ydata)])
-        .range([0, height]);
-        this.yscl = yscl
 
         const x_axis = d3.axisBottom()
-                        .scale(xscl)
+            .scale(xscl)
+
+        const yscl = d3.scaleLinear()
+            .domain([d3.max(ydata), d3.min(ydata)])
+            .range([0, height]);
 
         const y_axis = d3.axisLeft()
-                        .scale(yscl)
+            .scale(yscl)
 
         svg.append("g")
             .attr("transform", `translate(0,${(yscl(0))})`)
             .attr("class", `xaxis`)
             .call(x_axis)
+
+
+        svg.select(".xaxis")
+            // .transition()
+            // .ease(d3.easeExp)
+            // .duration(1700)
+            .attr("transform", `translate(0,${yscl(0)})`)
+            .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
+            .selectAll("text")
+            .attr("y", 0)
+            .attr("x", 9)
+            .attr("dy", ".35em")
+            // .attr("transform", "rotate(90)")
+            .style("text-anchor", "start")
+            .style("opacity", 0)
+            // .style("fill", "white")
 
         svg.append("g")
             .attr("class", `yaxis`)
@@ -117,8 +134,8 @@ export default class Chart{
 
         // create line generator
         const line = d3.line()
-            .x( d => { return xscl(d.x) } )
-            .y( d => { return yscl(d.y) } )
+            .x(d => { return xscl(parseTime(d.x)); })
+            .y(d => { return yscl(d.y); })
             .curve(d3.curveBundle.beta(0.85));
 
         svg.append("text")
@@ -163,7 +180,7 @@ export default class Chart{
         svg.append('path')
             .attr("fill", "none")
             .attr("stroke", "lightgrey")
-            .attr("stroke-width", "1.5px")
+            .attr("stroke-width", "3px")
             .attr("stroke-linecap", "round")
             .data([data])
             .attr("class", "line")
@@ -221,7 +238,7 @@ export default class Chart{
         svg.select(".xaxis")
                 .transition()
                 .ease(d3.easeExp)
-                .duration(2000)
+                .duration(1700)
             .attr("transform", `translate(0,${yscl(0)})`)
             .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
                 .selectAll("text")
@@ -231,11 +248,12 @@ export default class Chart{
                 .attr("transform", "rotate(90)")
                 .style("text-anchor", "start")
                 .style("fill", "white")
+                .style("opacity", 1)
 
         svg.select(".good-label")
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("y", yscl(good) - 5)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
@@ -243,7 +261,7 @@ export default class Chart{
         svg.select(".bad-label")
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("y", yscl(bad) + 15)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
@@ -251,7 +269,7 @@ export default class Chart{
         svg.select(".yaxis")
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .call(y_axis)
             .selectAll("text")
             .style("fill", "white")
@@ -275,14 +293,14 @@ export default class Chart{
             .data([lineData])
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("class", "line")
             .attr("d", line)
 
         svg.select(".good-line")
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("x1", 0)
             .attr("y1", yscl(good))
             .attr("x2", width)
@@ -292,7 +310,7 @@ export default class Chart{
         svg.select(".bad-line")
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("x1", 0)
             .attr("y1", yscl(bad) )
             .attr("x2", width)
@@ -321,7 +339,7 @@ export default class Chart{
         createDots
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
             .attr("r", d => {
@@ -341,7 +359,7 @@ export default class Chart{
         updateDots
             .transition()
             .ease(d3.easeExp)
-            .duration(2000)
+            .duration(1700)
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
