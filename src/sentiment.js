@@ -54,13 +54,12 @@ const averageDayScores = data => {
 
     const averagedData = []
     Object.keys(processedData).forEach(date => {
-        averagedData.push({ x: date, y: Math.round((processedData[date] / count[date]) * 1000) / 1000});
+        averagedData.push({[date]: {x: date, y: Math.round((processedData[date] / count[date]) * 1000) / 1000}});
     })
     
     const sortedAveragedData = averagedData.sort(sortDate)
     return sortedAveragedData
 }
-
 
 const sortDate = (a, b) => {
     const date1 = new Date(a.x)
