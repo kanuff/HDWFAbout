@@ -75,6 +75,8 @@ const fillArticleInfo = (singleArticleInfo, d) => {
         .html(
             `${d.description}`
         );
+    singleArticleInfo.select(".article-image")
+        .attr("src", `${d.image}`)
 }
 
 const handleDotUX = (d, bigDot, singleArticleInfo) => {

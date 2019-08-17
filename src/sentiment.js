@@ -6,6 +6,7 @@ export const processData = ({articles, value}) => {
     const sentiment = new Sentiment();
     const processingData = [];
     const ratio = 0.6
+    debugger
     articles.forEach(article => {
         const datum = {}
         datum.content = article.content || ""
@@ -13,6 +14,7 @@ export const processData = ({articles, value}) => {
         datum.author = article.author || datum.title
         datum.source = article.source.name
         datum.url = article.url
+        datum.image = article.urlToImage
         datum.description = article.description || "Unavailable";
         
         const contentSentiment = sentiment.analyze(datum.content)
