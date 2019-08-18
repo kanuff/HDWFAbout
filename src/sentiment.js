@@ -27,7 +27,7 @@ export const processData = ({articles, value}) => {
         datum.y = Math.round(score * 1000)/1000
         processingData.push(datum)
     })
-    payload.scatterData = processingData;
+    payload.scatterData = processingData.sort(sortDateDesc);
     payload.lineData = averageDayScores(processingData);
     payload.total = calculateTotals(processingData);
 
@@ -64,6 +64,16 @@ const averageDayScores = data => {
 }
 
 const sortDate = (a, b) => {
+    const date1 = new Date(a.x)
+    const date2 = new Date(b.x)
+    if (date1 >= date2){ 
+        return 1
+    } else {
+        return -1
+    }
+};
+
+const sortDateDesc = (b, a) => {
     const date1 = new Date(a.x)
     const date2 = new Date(b.x)
     if (date1 >= date2){ 

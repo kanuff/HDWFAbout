@@ -33,35 +33,25 @@ const generateDateRange = (startDate, endDate) => {
     return dates
 }
 
-const mergeOnDates = (dataset, daterange) => {
-    const merged = []
-    daterange.forEach((date,i) => {
-        const d1 = new Date(dataset[i].x)
-        const d2 = new Date(date)
-        debugger
-
-    })
-}
-
 
 export default class Chart{
     constructor(props){
         this.data = props.data
         this.margin = {
-            top: 50,
-            right: 80,
-            bottom: 70,
+            top: 30,
+            right: 20,
+            bottom: 50,
             left: 20,
         }
         this.cutoff = 3
         this.good = this.cutoff
         this.bad = this.cutoff * -1
-        this.width = 900 - this.margin.left - this.margin.right;
-        this.height = 500 - this.margin.top - this.margin.bottom;
+        this.width = 810 - this.margin.left - this.margin.right;
+        this.height = 370 - this.margin.top - this.margin.bottom;
         this.svg = d3.select('svg')
             .attr('width', this.width + this.margin.left + this.margin.right)
             .attr('height', this.height + this.margin.top + this.margin.bottom)
-            .style('background-color', 'rgba(255,255,255, 0.1)')
+            .style('background-color', 'transparent')
             .append("g")
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
         const today = new Date()
@@ -201,15 +191,11 @@ export default class Chart{
             payload.lineData
         )
 
-    
-        debugger
-
         const plineData = []
         prelineData.forEach(outerDatum => {
             plineData.push(Object.values(outerDatum))
         })
         const lineData = plineData.flat().sort(sortDate)
-        debugger
 
 
         conditionalTitleColor(total);
@@ -288,7 +274,6 @@ export default class Chart{
             .curve(d3.curveBundle.beta(0.85));
 
         const path = svg.selectAll('.line');
-        debugger
         path
             .data([lineData])
             .transition()
@@ -346,11 +331,87 @@ export default class Chart{
                 if (d.title === total.highScore.title) {
                     return 1
                 }
-                return 40 * d.relevance
+                return 8
             })
             .attr("id", (_,i) => {return "dot_" + i})
             .style("opacity", d => conditionalOpacity(d, good, bad))
             .style("fill", d => conditionalColor(d, good, bad));
+
+        const articlesContainer = d3.select("#articles-list")
+                                    .selectAll("li")
+                                    .data(scatterData)
+        articlesContainer
+            .enter().append("li")
+            .attr("class", "article-list-item")
+            .attr("id", (_,i) => {return "article_" + i})
+            .style("background", d => conditionalColor(d, good, bad, 0.1))
+            .text( function(d){
+                const date = new Date(d.x)
+                const options = { month: 'short', day: 'numeric' }
+                return `${date.toLocaleDateString("en-US", options)}: ${d.title}`
+            })
+            .on("click", function(d,i){
+                d3.selectAll(".dot")
+                    .style("fill", d => conditionalColor(d, good, bad))
+                    .style("opacity", d => conditionalOpacity(d, good, bad));
+                d3.select(`#dot_${i}`)
+                    .attr("r", function (d, i) {
+                            bigDot = d3.select(this)
+                            handleDotUX(d, bigDot, singleArticleInfo, 0.2);
+                            return 15
+                    });
+            })
+            .on("mouseover", function(d,i){
+                d3.selectAll(".dot")
+                    .style("fill", d => conditionalColor(d, good, bad))
+                    .style("opacity", d => conditionalOpacity(d, good, bad));
+                d3.select(`#dot_${i}`)
+                    .style("opacity", 1)
+                    .style("fill", "lightblue");
+
+                d3.selectAll(".article-list-item")
+                    .style("background", d => conditionalColor(d, good, bad, 0.1));
+                d3.select(this)
+                    .style("opacity", d => conditionalColor(d, good, bad, 0.3));
+            })
+
+
+        articlesContainer
+            .style("background", d => conditionalColor(d, good, bad, 0.1))
+            .text(function (d) {
+                const date = new Date(d.x)
+                const options = { month: 'short', day: 'numeric' }
+                return `${date.toLocaleDateString("en-US", options)}: ${d.title}`
+            })
+            // .on("click", function (d, i) {
+            //     d3.selectAll(".dot")
+            //         .style("fill", d => conditionalColor(d, good, bad))
+            //         .style("opacity", d => conditionalOpacity(d, good, bad));
+            //     d3.select(`#dot_${i}`)
+            //         .attr("r", function (d, i) {
+            //             bigDot = d3.select(this)
+            //             handleDotUX(d, bigDot, singleArticleInfo, 0.2);
+            //             return 15
+            //         });
+            // })
+            // .on("mouseover", function (d, i) {
+            //     d3.selectAll(".dot")
+            //         .style("fill", d => conditionalColor(d, good, bad))
+            //         .style("opacity", d => conditionalOpacity(d, good, bad));
+            //     d3.select(`#dot_${i}`)
+            //         .style("opacity", 1)
+            //         .style("fill", "lightblue");
+
+            //     d3.selectAll(".article-list-item")
+            //         .style("background", d => conditionalColor(d, good, bad, 0.1));
+            //     d3.select(this)
+            //         .style("opacity", d => conditionalColor(d, good, bad, 0.3));
+            // })
+
+
+            // .each( d => {
+                
+            // })
 
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)
@@ -368,9 +429,9 @@ export default class Chart{
                 if (d.title === total.highScore.title) {
                     bigDot = d3.select(this)
                     handleDotUX(d, bigDot, singleArticleInfo);
-                    r = 100 * d.relevance
+                    r = 15
                 } else {
-                    r = 40 * d.relevance
+                    r = 8
                 }
                 return r
             })

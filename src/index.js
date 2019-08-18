@@ -12,6 +12,7 @@ if (process.env.NODE_ENV !== "production") {
 document.addEventListener('DOMContentLoaded', () => {
     const props = {}
     const main = document.getElementById("main");
+    const secondTitle = document.getElementById("second-title")
 
     // Testing because I forgot how to vanilla js
     // const newDiv = document.createElement('div');
@@ -23,7 +24,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const chart = new Chart(props)
     props.chart = chart
 
-    main.appendChild(queryField(props));
+    main.insertBefore(queryField(props), secondTitle);
+
 
 
     const dummyData = chart.dummyData();
