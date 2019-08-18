@@ -1,6 +1,7 @@
 
 :root{
-	--title-font: Georgia, 'Times New Roman', Times, serif;
+	/* --title-font: Georgia, 'Times New Roman', Times, serif; */
+	--title-font: 'Lucida Sans', 'Lucida Sans Regular', 'Lucida Grande', 'Lucida Sans Unicode', Geneva, Verdana, sans-serif;
 	--title-font-size: 23px;
 	--title-font-weight: 600;
 }
@@ -68,6 +69,7 @@ body > div {
 	background-color: transparent;
 	border-radius: 4px;
 	height: 89vh;
+	font-family: var(--title-font);
 }
 
 img {
@@ -91,6 +93,8 @@ img {
 	overflow: hidden;
 	box-shadow: black 1px 1px 5px 0px;
 }
+
+
 
 svg {
 	display: flex;
@@ -131,6 +135,10 @@ svg {
 	color: rgba(255,255,255, 0.5);
 	font-size: 17px;
 }
+
+/* .article-author-label, .article-author{
+	font-size: 12px;
+} */
 
 .article-title{
 	font-size: 24px;

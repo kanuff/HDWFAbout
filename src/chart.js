@@ -317,7 +317,7 @@ export default class Chart{
                     .style("opacity", d => conditionalOpacity(d, good, bad))
                 d3.select(this)
                     .style("opacity", 1)
-                    .style("fill", "lightblue");
+                    .style("fill", "darkblue");
                 fillArticleInfo(singleArticleInfo, d)
             })
 
@@ -358,7 +358,7 @@ export default class Chart{
                     .attr("r", function (d, i) {
                             bigDot = d3.select(this)
                             handleDotUX(d, bigDot, singleArticleInfo, 0.2);
-                            return 15
+                            return 20
                     });
             })
             .on("mouseover", function(d,i){
@@ -367,7 +367,7 @@ export default class Chart{
                     .style("opacity", d => conditionalOpacity(d, good, bad));
                 d3.select(`#dot_${i}`)
                     .style("opacity", 1)
-                    .style("fill", "lightblue");
+                    .style("fill", "darkblue");
 
                 d3.selectAll(".article-list-item")
                     .style("background", d => conditionalColor(d, good, bad, 0.1));
@@ -383,6 +383,9 @@ export default class Chart{
                 const options = { month: 'short', day: 'numeric' }
                 return `${date.toLocaleDateString("en-US", options)}: ${d.title}`
             })
+
+        articlesContainer
+            .exit().remove()
             // .on("click", function (d, i) {
             //     d3.selectAll(".dot")
             //         .style("fill", d => conditionalColor(d, good, bad))
@@ -429,7 +432,7 @@ export default class Chart{
                 if (d.title === total.highScore.title) {
                     bigDot = d3.select(this)
                     handleDotUX(d, bigDot, singleArticleInfo);
-                    r = 15
+                    r = 20
                 } else {
                     r = 8
                 }

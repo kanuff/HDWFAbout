@@ -12,26 +12,8 @@ export default (props) => {
     
     form.appendChild(queryInput)
     form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
-    form.addEventListener("submit", () => {
-        event.preventDefault();
-        // const chart = props.chart
-        
-        // const value = queryInput.value;
-        // console.log(`I WAS SUBMITTED WITH THE TEXT ${value}`)
-        // fetchEverythingFor(value)
-        //     .then(response => {
-        //        const payload = {}
-        //        payload.query = value
-        //        payload.articles = response.articles
-        //        return payload
-        //     })
-        //     .then( payload => processData(payload) ) // should return array of objects, x is datetime, y is sentiment score
-        //     .then( (payload) => {
-        //         console.log("Rerendering");
-        //         chart.render(payload)
-        //     })
-    })
-
+    // form.addEventListener("submit", () => { handleTyping(event, props, queryInput)})
+    form.addEventListener("submit", () => { event.preventDefault()})
                             
     return (
         form
