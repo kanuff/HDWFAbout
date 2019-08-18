@@ -9,44 +9,48 @@
         <script src='https://d3js.org/d3.v4.min.js'></script>
         <script type="text/javascript" src="./dist/main.js"></script>
     </head>
-    <body>
+    <body class="">
         <div id="main">
-            <div class="chart-title">How Did We Feel About...</div>
+            <div id="title" class="chart-title">Give Me Some Context For </div>
+            <div id="second-title" class="chart-title"> This Month</div>
         </div>
-        <div class="info-container">
-            <div class="article-info">
+        <div class="info-container ">
+            <div class="article-info  ">
                 <div class="article-info-container">
                     <div class="article-title-container">
-                        <div class="article-title-label label">Title: </div>
+                        <!-- <div class="article-title-label label">Title: </div> -->
                         <div class="article-title info"></div>
+                    </div>
+                    <div class="article-image-container">
+                        <img class="article-image" src="" alt="">
                     </div>
                     <div class="article-author-container flex-row">
                         <div class="article-author-label label">Author: </div>
                         <div class="article-author info"></div>
                     </div>
-                    <div class="article-sentiment-container flex-row">
+                    <!-- <div class="article-sentiment-container flex-row">
                         <div class="article-sentiment-label label">Sentiment: </div>
                         <div class="article-sentiment info"></div>
                     </div>
                     <div class="article-relevance-container flex-row">
                         <div class="article-relevance-label label">Relevance: </div>
                         <div class="article-relevance info"></div>
-                    </div>
+                    </div> -->
                     <div class="article-description-container">
                         <div class="article-description-label label">Description: </div>
                         <div class="article-description info"></div>
+                        <a class="read-more" href="" target="_blank">Read more...</a>
                     </div>
                 </div>
-                Articles
-                <div class="articles-container">
-                    <ul>
-                        <li>Article one</li>
-                        <li>Article two</li>
-                        <li>Article three</li>
+
+            </div>
+            <div class="articles-container ">
+                <svg class="" id="chart"></svg>
+                <div class="articles-list-container ">
+                    <ul id="articles-list" class="">
                     </ul>
                 </div>
             </div>
-            <svg id="chart"></svg>
         </div>
 
     </body>
