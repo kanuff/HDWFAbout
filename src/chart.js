@@ -118,12 +118,6 @@ export default class Chart{
             .call(y_axis.tickSize(0).tickSizeOuter(5))
             .selectAll("text").remove()
 
-        // svg.append("g")
-        //     // .attr("transform", "translate(0," + height + ")")
-        //     .call(d3.axisBottom(x).tickSizeOuter(0))
-
-
-
         // create line generator
         const line = d3.line()
             .x(d => { return xscl(parseTime(d.x)); })
@@ -339,13 +333,19 @@ export default class Chart{
             .on("click", d => {
                 window.open(d.url, "_blank")
             })
-            .on("mouseover", function(d) {
+            .on("mouseover", function(d,i) {
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad))
                 d3.select(this)
                     .style("opacity", 1)
                     .style("fill", "darkblue");
+
+                d3.selectAll(".article-list-item")
+                    .style("background", d => conditionalColor(d, good, bad, 0.3));
+                d3.select(`#article_${i}`)
+                    .style("background", "rgba(0, 0, 139, 0.5)");
+
                 fillArticleInfo(singleArticleInfo, d)
             })
 
@@ -390,19 +390,17 @@ export default class Chart{
                     });
             })
             .on("mouseover", function(d,i){
+                d3.selectAll(".article-list-item")
+                    .style("background", d => conditionalColor(d, good, bad, 0.3));
+                d3.select(this)
+                    .style("background", "rgba(0, 0, 139, 0.5)");
+
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad));
                 d3.select(`#dot_${i}`)
                     .style("opacity", 1)
-                    .style("fill", "darkblue");
-
-                d3.selectAll(".article-list-item")
-                    .style("background", d => conditionalColor(d, good, bad, 0.3));
-                d3.selectAll(this)
-                    // .style("opacity", d => conditionalColor(d, good, bad, 0.3))
-                    .style("fill", "rgba(0, 0, 139, 0.5)")
-                
+                    .style("fill", "darkblue");                
             })
 
 
@@ -416,35 +414,6 @@ export default class Chart{
 
         articlesContainer
             .exit().remove()
-            // .on("click", function (d, i) {
-            //     d3.selectAll(".dot")
-            //         .style("fill", d => conditionalColor(d, good, bad))
-            //         .style("opacity", d => conditionalOpacity(d, good, bad));
-            //     d3.select(`#dot_${i}`)
-            //         .attr("r", function (d, i) {
-            //             bigDot = d3.select(this)
-            //             handleDotUX(d, bigDot, singleArticleInfo, 0.2);
-            //             return 15
-            //         });
-            // })
-            // .on("mouseover", function (d, i) {
-            //     d3.selectAll(".dot")
-            //         .style("fill", d => conditionalColor(d, good, bad))
-            //         .style("opacity", d => conditionalOpacity(d, good, bad));
-            //     d3.select(`#dot_${i}`)
-            //         .style("opacity", 1)
-            //         .style("fill", "lightblue");
-
-            //     d3.selectAll(".article-list-item")
-            //         .style("background", d => conditionalColor(d, good, bad, 0.1));
-            //     d3.select(this)
-            //         .style("opacity", d => conditionalColor(d, good, bad, 0.3));
-            // })
-
-
-            // .each( d => {
-                
-            // })
 
         const updateDots = svg.selectAll(".dot")
             .data(scatterData)

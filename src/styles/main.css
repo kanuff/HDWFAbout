@@ -304,3 +304,11 @@ ul {
 	max-width: 35px;
 	min-width: 35px;
 }
+
+li {
+  -webkit-transition: fill 0.15s, opacity 0.15s, background-color 0.2s;
+  -moz-transition:    fill 0.15s, opacity 0.15s, background-color 0.2s;
+  -ms-transition:     fill 0.15s, opacity 0.15s, background-color 0.2s;
+  -o-transition:      fill 0.15s, opacity 0.15s, background-color 0.2s;
+  transition:         fill 0.15s, opacity 0.15s, background-color 0.2s;
+}

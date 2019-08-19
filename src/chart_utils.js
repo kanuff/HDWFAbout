@@ -107,14 +107,14 @@ const fillArticleInfo = (singleArticleInfo, d) => {
 }
 
 const handleDotUX = (d, bigDot, singleArticleInfo, speed=1) => {
-    const delay = 1800
+    const delay = 2100
     if (speed >= 1){
         // setTimeout(() => {
             bigDot
                 .transition()
                 .delay(delay)
                 .ease(d3.easeElastic)
-                .duration(2000)
+                .duration(2500)
                 .attr("r", 8)
                 .style("fill", "darkblue")
                 .style("opacity", 1);
@@ -122,15 +122,15 @@ const handleDotUX = (d, bigDot, singleArticleInfo, speed=1) => {
                 // setTimeout(() => {
                     singleArticleInfo
                     .transition()
-                    .delay(delay + 1000)
+                    .delay(delay + 500)
                     .duration(800)
-                        .style("background-color", "rgba(0, 0, 139, 0.5)");
+                    .style("background-color", "rgba(0, 0, 139, 0.5)");
 
                     fillArticleInfo(singleArticleInfo, d);
 
                     singleArticleInfo
                         .transition()
-                        .delay(delay + 1700)
+                        .delay(delay + 1350)
                         .duration(800)
                         .style("background-color", "transparent")
                 // }, 800*speed)
