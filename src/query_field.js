@@ -39,7 +39,7 @@ const typingWord = (queryInput) => {
 
     const cycle = setInterval( function(){
         const rand = Math.random()
-        if (rand > 0.65) {
+        if (rand > 0.3) {
             i++
             queryInput.setAttribute("placeholder", str.slice(0, i))
         }
