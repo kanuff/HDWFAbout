@@ -337,9 +337,15 @@ export default class Chart{
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad))
-                d3.select(this)
+                const dot = d3.select(this)
                     .style("opacity", 1)
                     .style("fill", "darkblue");
+
+                dot
+                    .transition()
+                    .ease(d3.easeElastic)
+                    .duration(500)
+                    .attr("r", 20)
 
                 d3.selectAll(".article-list-item")
                     .style("background", d => conditionalColor(d, good, bad, 0.3));
@@ -347,6 +353,13 @@ export default class Chart{
                     .style("background", "rgba(0, 0, 139, 0.5)");
 
                 fillArticleInfo(singleArticleInfo, d)
+            })
+            .on("mouseout", function(d){
+                d3.select(this)
+                    .transition()
+                    .ease(d3.easeElastic)
+                    .duration(500)
+                    .attr("r", 8)
             })
 
         createDots
