@@ -6,7 +6,7 @@ export const processData = ({articles, value}) => {
     const sentiment = new Sentiment();
     const processingData = [];
     const ratio = 0.6
-    debugger
+
     articles.forEach(article => {
         const datum = {}
         datum.content = article.content || ""
