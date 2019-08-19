@@ -26,11 +26,13 @@ export default (props) => {
 const typingWord = (queryInput) => {
     const options = [
         "Hong Kong",
-        "Bees",
-        "Bears",
-        "Beets",
+        "bees",
+        "bears",
+        "beets",
         "Congress",
-        "Paper Sales"
+        "paper Sales",
+        "cheese",
+        "the news"
     ]
     const str = options[Math.floor(Math.random() * options.length)]
     let i = 0;

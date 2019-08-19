@@ -20,10 +20,7 @@ document.addEventListener('DOMContentLoaded', () => {
     main.insertBefore(queryField(props), secondTitle);
 
 
-
     const dummyData = chart.dummyData();
     chart.build(dummyData);
 
-    
-    
 })
