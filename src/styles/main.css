@@ -159,6 +159,14 @@ svg {
 
 .article-info-container{
 	height: 100%;
+	justify-content: space-between;
+	display: flex;
+	flex-direction: column;
+	/* box-shadow: inset 0 -2px 3px -2px black; */
+}
+
+.article{
+	height: 90%;
 	overflow-y: scroll;
 	overflow-x: hidden;
 	-webkit-transition: fill 0.15s, opacity 0.15s, background-color 1s;
@@ -169,8 +177,9 @@ svg {
 	border-radius: 4px;
 	padding: 8.5px;
 	padding-bottom: 15px;
-	/* box-shadow: inset 0 -2px 3px -2px black; */
 }
+
+
 
 .article-info-container::-webkit-scrollbar {
 	width: 6px;
@@ -265,4 +274,24 @@ ul {
 #articles-list::-webkit-scrollbar-thumb{
 	background: rgba(104, 104, 104, 0.822);
 	border-radius: 6px;
+}
+
+.personal-links-container{
+	/* margin-bottom: 10px; */
+	padding-left: 10px;
+	/* padding-left: 10px; */
+}
+
+.personal-links-container > * {
+	/* border: red solid 1px; */
+	line-height: 100%;
+}
+.icon{
+	width: 30px;
+	height: 30px;
+	margin-left: 10px;
+}
+
+#linkedin-icon{
+	width: 35px;
 }

@@ -7,6 +7,7 @@ export default (props) => {
     
     const queryInput = document.createElement("input");
     queryInput.setAttribute("type", "text");
+    queryInput.setAttribute("placeholder", "Hong Kong");
     queryInput.setAttribute("class", "query-field");
     
     
@@ -14,10 +15,27 @@ export default (props) => {
     form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
     // form.addEventListener("submit", () => { handleTyping(event, props, queryInput)})
     form.addEventListener("submit", () => { event.preventDefault()})
+    // form.addEventListener("focus", () => {
+    //     cycleInputs(false)
+    // })
+    // cycleInputs();
                             
     return (
         form
     )
+}
+
+const cycleInputs = (active=true) => {
+    const queryInput = d3.select(".query-field")
+    const value ="testing"
+    let prevValue = ""
+    while(active){
+        if(value !== prevValue){
+            queryInput
+                .html(value)
+            prevValue = value
+        }
+    }
 }
 
 

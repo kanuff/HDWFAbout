@@ -13,13 +13,6 @@ document.addEventListener('DOMContentLoaded', () => {
     const props = {}
     const main = document.getElementById("main");
     const secondTitle = document.getElementById("second-title")
-
-    // Testing because I forgot how to vanilla js
-    // const newDiv = document.createElement('div');
-    // const newContent = document.createTextNode("I'm being created within the index.js file to test if changes show");
-    // newDiv.appendChild(newContent);
-    // main.appendChild(newDiv);
-    // Testing because I forgot how to vanilla js
     
     const chart = new Chart(props)
     props.chart = chart
