@@ -4,35 +4,11 @@ import {
     conditionalOpacity,
     conditionalTitleColor,
     fillArticleInfo,
-    handleDotUX
+    handleDotUX,
+    generateDateRange,
+    sortDate,
+    mergeLineData
 } from './chart_utils'
-
-const sortDate = (a, b) => {
-    const date1 = new Date(a.x)
-    const date2 = new Date(b.x)
-    if (date1 >= date2) {
-        return 1
-    } else {
-        return -1
-    }
-}
-
-Date.prototype.addDay = function () {
-    this.setDate(this.getDate() + 1)
-}
-
-const generateDateRange = (startDate, endDate) => {
-    const dates = []
-    let currentDate = startDate
-    while (currentDate < endDate) {
-        const date = new Date(currentDate)
-        const formattedDate = `${date.getFullYear()}` + "-" + `0${date.getMonth() +1}` + "-" + `${date.getDate()}`
-        dates.push({[formattedDate]: {x: formattedDate, y: null}})
-        currentDate.addDay()
-    }
-    return dates
-}
-
 
 export default class Chart{
     constructor(props){
@@ -58,6 +34,7 @@ export default class Chart{
         this.startDate = new Date(today.setDate(today.getDate() - 31))
         this.endDate = new Date();
         this.dateRange = generateDateRange(this.startDate, this.endDate)
+        this.xFormat = "%b-%d";
     }
 
     dummyData(){
@@ -69,12 +46,11 @@ export default class Chart{
             const datum = {x:Object.keys(this.dateRange[x])[0], y};
             dummyData.push(datum);
         }
-        console.log(dummyData)
         return dummyData
     }
 
     build(data){
-        const { svg, height, width, good, bad } = this
+        const { svg, height, width, good, bad, xFormat, margin } = this
         const xdata = []
         const ydata = []
         data.forEach(datum => {
@@ -82,7 +58,6 @@ export default class Chart{
             ydata.push(datum.y)
         })
         const parseTime = d3.timeParse("%Y-%m-%d")
-        const xFormat = "%b-%d";
         const xscl = d3.scaleTime()
             .domain(d3.extent(data, d => { return parseTime(d.x) }))
             .range([0, width]);
@@ -124,6 +99,7 @@ export default class Chart{
             .y(d => { return yscl(d.y); })
             .curve(d3.curveBundle.beta(0.85));
 
+        //good-label
         svg.append("text")
             .attr("y", yscl(good) - 5 )
             .attr("x", 15)
@@ -133,6 +109,7 @@ export default class Chart{
             // .style("fill", "rgba(0, 128, 0, 0.6)")
             .text("+ sentiment")
 
+        //bad-label
         svg.append("text")
             .attr("y", yscl(bad) + 15 )
             .attr("x", 15)
@@ -142,6 +119,7 @@ export default class Chart{
             // .style("fill", "rgba(200, 0, 0, 0.6)")
             .text("- sentiment")
 
+        //build good-line
         svg.append("line")
             .attr("x1", 0)
             .attr("y1", yscl(good))
@@ -153,6 +131,7 @@ export default class Chart{
             .attr("class", "good-line")
             .style("stroke-dasharray", ("3, 3"));
 
+        // build bad-line
         svg.append("line")
             .attr("x1", 0)
             .attr("y1", yscl(bad))
@@ -177,23 +156,11 @@ export default class Chart{
 
     render(payload){
         const { scatterData, total } = payload
-        const { svg, height, width, good, bad } = this
+        const { svg, height, width, good, bad, xFormat } = this
         const ydata = []
         const xdata = []
         const singleArticleInfo = d3.select(".article-info-container")
-
-
-        const prelineData = Object.assign(
-            [],
-            this.dateRange,
-            payload.lineData
-        )
-
-        const plineData = []
-        prelineData.forEach(outerDatum => {
-            plineData.push(Object.values(outerDatum))
-        })
-        const lineData = plineData.flat().sort(sortDate)
+        const lineData = mergeLineData(this.dateRange, payload.lineData)
 
 
         conditionalTitleColor(total);
@@ -204,7 +171,7 @@ export default class Chart{
         })
 
         const parseTime = d3.timeParse("%Y-%m-%d")
-        const xFormat = "%b-%d";
+       
         const xscl = d3.scaleTime()
             .domain(d3.extent(lineData, d => { return parseTime(d.x) }))
             .range([0, width]);
@@ -276,17 +243,10 @@ export default class Chart{
             .selectAll("text").remove()
 
 
+
         const line = d3.line()
             .x(d => { return xscl(parseTime(d.x)); })
             .y(d => { return yscl(d.y); })
-            // .defined(d => {
-            //     debugger
-            //     if (d.y) {
-            //         return true
-            //     } else {
-            //         return false
-            //     }
-            // })
             .curve(d3.curveBundle.beta(0.85));
 
         const path = svg.selectAll('.line');

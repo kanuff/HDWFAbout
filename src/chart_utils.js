@@ -149,11 +149,51 @@ const handleDotUX = (d, bigDot, singleArticleInfo, speed=1) => {
     }
 }
 
+Date.prototype.addDay = function () {
+    this.setDate(this.getDate() + 1)
+}
+
+const generateDateRange = (startDate, endDate) => {
+    const dates = []
+    let currentDate = startDate
+    while (currentDate < endDate) {
+        const date = new Date(currentDate)
+        const formattedDate = `${date.getFullYear()}` + "-" + `0${date.getMonth() + 1}` + "-" + `${date.getDate()}`
+        dates.push({ [formattedDate]: { x: formattedDate, y: null } })
+        currentDate.addDay()
+    }
+    return dates
+}
+
+const sortDate = (a, b) => {
+    const date1 = new Date(a.x)
+    const date2 = new Date(b.x)
+    if (date1 >= date2) {
+        return 1
+    } else {
+        return -1
+    }
+}
+
+const mergeLineData = (dateRange, lineData) => {
+    const mergedData = Object.assign([], dateRange, lineData)
+    const unkeyedData = []
+    mergedData.forEach(outerDatum => {
+        unkeyedData.push(Object.values(outerDatum))
+    })
+    return unkeyedData.flat().sort(sortDate)
+}
+
+
+
 export {
     conditionalTitleColor,
     conditionalDisplay,
     conditionalOpacity,
     conditionalColor,
     fillArticleInfo,
-    handleDotUX
+    handleDotUX,
+    generateDateRange,
+    sortDate,
+    mergeLineData
 }

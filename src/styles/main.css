@@ -192,20 +192,21 @@ svg {
 
 
 
-.article-info-container::-webkit-scrollbar {
+.article::-webkit-scrollbar {
 	width: 6px;
 	border-radius: 6px;
 }
-.article-info-container::-webkit-scrollbar-corner {
+.article::-webkit-scrollbar-corner {
 	background: rgba(0,0,0,0);
 	height: 1px;
+
 }
-.article-info-container::-webkit-scrollbar-track-piece{
+.article::-webkit-scrollbar-track-piece{
     border-radius: 6px;
 	background: transparent;
 }
-.article-info-container::-webkit-scrollbar-thumb{
-	background: rgba(104, 104, 104, 0.822);
+.article::-webkit-scrollbar-thumb{
+	background: rgba(255, 255, 255, 0.7);
 	border-radius: 6px;
 }
 
@@ -283,7 +284,7 @@ ul {
 	background: transparent;
 }
 #articles-list::-webkit-scrollbar-thumb{
-	background: rgba(104, 104, 104, 0.822);
+	background: rgba(255, 255, 255, 0.7);
 	border-radius: 6px;
 }
 
