@@ -361,7 +361,7 @@ export default class Chart{
             .enter().append("li")
             .attr("class", "article-list-item")
             .attr("id", (_,i) => {return "article_" + i})
-            .style("background", d => conditionalColor(d, good, bad, 0.4))
+            .style("background", d => conditionalColor(d, good, bad, 0.3))
             .text( function(d){
                 const date = new Date(d.x)
                 const options = { month: 'short', day: 'numeric' }
@@ -387,7 +387,7 @@ export default class Chart{
                     .style("fill", "darkblue");
 
                 d3.selectAll(".article-list-item")
-                    .style("background", d => conditionalColor(d, good, bad, 0.4));
+                    .style("background", d => conditionalColor(d, good, bad, 0.3));
                 d3.selectAll(this)
                     // .style("opacity", d => conditionalColor(d, good, bad, 0.3))
                     .style("fill", "rgba(0, 0, 139, 0.5)")
@@ -396,7 +396,7 @@ export default class Chart{
 
 
         articlesContainer
-            .style("background", d => conditionalColor(d, good, bad, 0.1))
+            .style("background", d => conditionalColor(d, good, bad, 0.3))
             .text(function (d) {
                 const date = new Date(d.x)
                 const options = { month: 'short', day: 'numeric' }
