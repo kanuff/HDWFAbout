@@ -287,11 +287,14 @@ ul {
 	line-height: 100%;
 }
 .icon{
-	width: 30px;
-	height: 30px;
+	max-width: 30px;
+	min-width: 30px;
+	max-height: 30px;
+	min-height: 30px;
 	margin-left: 10px;
 }
 
 #linkedin-icon{
-	width: 35px;
+	max-width: 35px;
+	min-width: 35px;
 }
