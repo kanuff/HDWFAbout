@@ -104,23 +104,25 @@ export default class Chart{
 
 
         svg.select(".xaxis")
-            // .transition()
-            // .ease(d3.easeExp)
-            // .duration(1700)
             .attr("transform", `translate(0,${yscl(0)})`)
             .call(x_axis.tickFormat(d3.timeFormat(xFormat)))
             .selectAll("text")
             .attr("y", 0)
             .attr("x", 9)
             .attr("dy", ".35em")
-            // .attr("transform", "rotate(90)")
             .style("text-anchor", "start")
             .style("opacity", 0)
-            // .style("fill", "white")
 
         svg.append("g")
             .attr("class", `yaxis`)
-            .call(y_axis);
+            .call(y_axis.tickSize(0).tickSizeOuter(5))
+            .selectAll("text").remove()
+
+        // svg.append("g")
+        //     // .attr("transform", "translate(0," + height + ")")
+        //     .call(d3.axisBottom(x).tickSizeOuter(0))
+
+
 
         // create line generator
         const line = d3.line()
@@ -169,7 +171,7 @@ export default class Chart{
         // draw the line
         svg.append('path')
             .attr("fill", "none")
-            .attr("stroke", "lightgrey")
+            .attr("stroke", "transparent")
             .attr("stroke-width", "3px")
             .attr("stroke-linecap", "round")
             .data([data])
@@ -221,6 +223,17 @@ export default class Chart{
         const y_axis = d3.axisLeft()
             .scale(yscl)
 
+        const labels = d3.selectAll(".label")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(1700)
+            .style("color", "rgba(255,255,255, 0.7)");
+        const readMore = d3.select(".read-more")
+            .transition()
+            .ease(d3.easeExp)
+            .duration(1700)
+            .style("color", "rgba(255,255,255, 0.7)");
+
         svg.select(".xaxis")
                 .transition()
                 .ease(d3.easeExp)
@@ -256,9 +269,12 @@ export default class Chart{
             .transition()
             .ease(d3.easeExp)
             .duration(1700)
-            .call(y_axis)
+            .call(y_axis.tickSize(0).tickSizeOuter(5))
             .selectAll("text")
-            .style("fill", "white")
+            .style("fill", "white");
+        svg.select(".yaxis")
+            .selectAll("text").remove()
+
 
         const line = d3.line()
             .x(d => { return xscl(parseTime(d.x)); })
@@ -280,6 +296,7 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(1700)
             .attr("class", "line")
+            .style("stroke", "rgba(0, 0, 139, 0.8)")
             .attr("d", line)
 
         svg.select(".good-line")
@@ -344,7 +361,7 @@ export default class Chart{
             .enter().append("li")
             .attr("class", "article-list-item")
             .attr("id", (_,i) => {return "article_" + i})
-            .style("background", d => conditionalColor(d, good, bad, 0.1))
+            .style("background", d => conditionalColor(d, good, bad, 0.4))
             .text( function(d){
                 const date = new Date(d.x)
                 const options = { month: 'short', day: 'numeric' }
@@ -370,9 +387,11 @@ export default class Chart{
                     .style("fill", "darkblue");
 
                 d3.selectAll(".article-list-item")
-                    .style("background", d => conditionalColor(d, good, bad, 0.1));
-                d3.select(this)
-                    .style("opacity", d => conditionalColor(d, good, bad, 0.3));
+                    .style("background", d => conditionalColor(d, good, bad, 0.4));
+                d3.selectAll(this)
+                    // .style("opacity", d => conditionalColor(d, good, bad, 0.3))
+                    .style("fill", "rgba(0, 0, 139, 0.5)")
+                
             })
 
 

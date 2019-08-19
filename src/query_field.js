@@ -7,8 +7,19 @@ export default (props) => {
     
     const queryInput = document.createElement("input");
     queryInput.setAttribute("type", "text");
-    queryInput.setAttribute("placeholder", "Hong Kong");
     queryInput.setAttribute("class", "query-field");
+
+    typingWord(queryInput);
+
+    // queryInput.addEventListener("focus", () => {
+    //     clearInterval(cycle)
+    //     console.log("Clearing interval")
+    //     queryInput.setAttribute("placeholder", "")
+    // })
+
+    // queryInput.addEventListener("blur", () => {
+    //     queryInput.setAttribute("placeholder", "Hong Kong")
+    // })
     
     
     form.appendChild(queryInput)
@@ -25,17 +36,38 @@ export default (props) => {
     )
 }
 
-const cycleInputs = (active=true) => {
-    const queryInput = d3.select(".query-field")
-    const value ="testing"
-    let prevValue = ""
-    while(active){
-        if(value !== prevValue){
-            queryInput
-                .html(value)
-            prevValue = value
+const typingWord = (queryInput) => {
+    const options = [
+        "Hong Kong",
+        "Bees",
+        "Bears",
+        "Beets",
+        "Congress",
+        "Paper"
+    ]
+    const str = options[Math.floor(Math.random() * options.length)]
+    let i = 0;
+
+    const cycle = setInterval( function(){
+        const rand = Math.random()
+        if (rand > 0.65) {
+            i++
+            console.log(str.slice(0, i))
+            queryInput.setAttribute("placeholder", str.slice(0, i))
         }
-    }
+        if (i >= str.length){
+            clearInterval(cycle)
+            setTimeout(()=>{
+                queryInput.setAttribute("placeholder", "")
+                typingWord(queryInput)
+            }, 1500)
+            
+        }
+    }, 300)
+    queryInput.addEventListener("focus", () => {
+        clearInterval(cycle)
+        queryInput.setAttribute("placeholder", "")
+    })
 }
 
 

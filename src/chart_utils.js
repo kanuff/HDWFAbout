@@ -70,25 +70,36 @@ const conditionalColor = (d, good, bad, opacity=1) => {
 
 const fillArticleInfo = (singleArticleInfo, d) => {
     singleArticleInfo.select(".article-title")
-        .html(
+        .text(
             `${d.title}`
-        );
+    ).transition()
+        .ease(d3.easeExp)
+        .duration(1700)
+        .style("color", "rgba(255,255,255, 0.5)");
     singleArticleInfo.select(".article-author")
-        .html(
-            `${d.author}`
-        );
-    singleArticleInfo.select(".article-sentiment")
-        .html(
-            `${d.y}`
-        );
-    singleArticleInfo.select(".article-relevance")
-        .html(
-            `${d.relevance}`
-        );
+        .text(
+            `${d.source}`
+    ).transition()
+        .ease(d3.easeExp)
+        .duration(1700)
+        .style("color", "rgba(255,255,255, 0.5)");
+    // singleArticleInfo.select(".article-sentiment")
+    //     .text(
+    //         `${d.y}`
+    //     );
+    // singleArticleInfo.select(".article-relevance")
+    //     .text(
+    //         `${d.relevance}`
+    //     );
     singleArticleInfo.select(".article-description")
-        .html(
+        .text(
             `${d.description}`
-        );
+        )
+        .transition()
+        .ease(d3.easeExp)
+        .duration(1700)
+        .style("color", "rgba(255,255,255, 0.5)")
+
     singleArticleInfo.select(".article-image")
         .attr("src", `${d.image}`)
     singleArticleInfo.select(".read-more")
@@ -112,15 +123,15 @@ const handleDotUX = (d, bigDot, singleArticleInfo, speed=1) => {
                     singleArticleInfo
                     .transition()
                     .delay(delay + 1000)
-                    .duration(100)
-                    .style("background-color", "rgba(255,255,255,0.3)");
+                    .duration(800)
+                        .style("background-color", "rgba(0, 0, 139, 0.5)");
 
                     fillArticleInfo(singleArticleInfo, d);
 
                     singleArticleInfo
                         .transition()
                         .delay(delay + 1700)
-                        .duration(200)
+                        .duration(800)
                         .style("background-color", "transparent")
                 // }, 800*speed)
             }

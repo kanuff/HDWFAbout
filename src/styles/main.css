@@ -7,7 +7,11 @@
 }
 
 html {
-	background-color: rgba(0,0,0,0.7);
+	/* background-color: rgba(36, 167, 248, 0.9); */
+	background-image: linear-gradient(rgba(36, 167, 248, 0.9), rgba(36, 167, 248, 0.9),  rgba(0, 0, 139, 0.85));
+
+	/* background-color: rgba(0, 68, 255, 0.795); */
+	/* background-color: rgba(0, 0, 139, 0.85); */
 }
 
 html * {
@@ -119,20 +123,26 @@ svg {
 	display: flex;
 }
 
+
 .label {
 	padding-right: 8px;
 	padding-bottom: 8px;
 	font-weight: 600;
 	font-size: 17px;
 	text-decoration: underline;
-	color: rgba(255,255,255, 0.7)
+	color: transparent;
+	/* color: rgba(0, 0, 139, 0.5); */
+}
+.read-more{
+	color: transparent
 }
 
 .info {
 	line-height: 175%;
 	padding-bottom: 8px;
 	margin-top: -4px;
-	color: rgba(255,255,255, 0.5);
+	color: transparent;
+	/* color: rgba(255,255,255, 0.5); */
 	font-size: 17px;
 }
 
