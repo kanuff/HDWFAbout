@@ -9,27 +9,14 @@ export default (props) => {
     queryInput.setAttribute("type", "text");
     queryInput.setAttribute("class", "query-field");
 
-    typingWord(queryInput);
-
-    // queryInput.addEventListener("focus", () => {
-    //     clearInterval(cycle)
-    //     console.log("Clearing interval")
-    //     queryInput.setAttribute("placeholder", "")
-    // })
-
-    // queryInput.addEventListener("blur", () => {
-    //     queryInput.setAttribute("placeholder", "Hong Kong")
-    // })
-    
+    setTimeout( () =>{
+        typingWord(queryInput);
+    }, 1000)
     
     form.appendChild(queryInput)
     form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
     // form.addEventListener("submit", () => { handleTyping(event, props, queryInput)})
     form.addEventListener("submit", () => { event.preventDefault()})
-    // form.addEventListener("focus", () => {
-    //     cycleInputs(false)
-    // })
-    // cycleInputs();
                             
     return (
         form
@@ -43,7 +30,7 @@ const typingWord = (queryInput) => {
         "Bears",
         "Beets",
         "Congress",
-        "Paper"
+        "Paper Sales"
     ]
     const str = options[Math.floor(Math.random() * options.length)]
     let i = 0;
@@ -52,11 +39,11 @@ const typingWord = (queryInput) => {
         const rand = Math.random()
         if (rand > 0.65) {
             i++
-            console.log(str.slice(0, i))
             queryInput.setAttribute("placeholder", str.slice(0, i))
         }
         if (i >= str.length){
             clearInterval(cycle)
+            queryInput.removeEventListener("focus", clearInput(queryInput, cycle))
             setTimeout(()=>{
                 queryInput.setAttribute("placeholder", "")
                 typingWord(queryInput)
@@ -64,12 +51,13 @@ const typingWord = (queryInput) => {
             
         }
     }, 300)
-    queryInput.addEventListener("focus", () => {
-        clearInterval(cycle)
-        queryInput.setAttribute("placeholder", "")
-    })
+    queryInput.addEventListener("focus", clearInput(queryInput, cycle))
 }
 
+const clearInput = (queryInput, cycle) => () => {
+    clearInterval(cycle)
+    queryInput.setAttribute("placeholder", "")
+}
 
 const handleTyping = (event,props, queryInput) => {
     event.preventDefault();
@@ -85,7 +73,6 @@ const handleTyping = (event,props, queryInput) => {
         })
         .then(payload => processData(payload)) 
         .then((payload) => {
-            console.log("Rerendering");
             chart.render(payload)
         })
 }

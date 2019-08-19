@@ -135,7 +135,8 @@ export default class Chart{
             .attr("x", 15)
             .attr("class", "good-label")
             .attr("text-anchor", "right")
-            .style("fill", "rgba(0, 128, 0, 0.6)")
+            .style("fill", "transparent")
+            // .style("fill", "rgba(0, 128, 0, 0.6)")
             .text("+ sentiment")
 
         svg.append("text")
@@ -143,7 +144,8 @@ export default class Chart{
             .attr("x", 15)
             .attr("class", "bad-label")
             .attr("text-anchor", "right")
-            .style("fill", "rgba(200, 0, 0, 0.6)")
+            .style("fill", "transparent")
+            // .style("fill", "rgba(200, 0, 0, 0.6)")
             .text("- sentiment")
 
         svg.append("line")
@@ -152,7 +154,7 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(good))
             .attr("fill", "none")
-            .attr("stroke", "green")
+            .attr("stroke", "transparent")
             .attr("stroke-width", "1px")
             .attr("class", "good-line")
             .style("stroke-dasharray", ("3, 3"));
@@ -163,7 +165,7 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(bad))
             .attr("fill", "none")
-            .attr("stroke", "red")
+            .attr("stroke", "transparent")
             .attr("stroke-width", "1px")
             .attr("class", "bad-line")
             .style("stroke-dasharray", ("3, 3"))
@@ -256,6 +258,8 @@ export default class Chart{
             .attr("y", yscl(good) - 5)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
+            .style("fill", "rgba(0, 128, 0, 0.6)")
+
 
         svg.select(".bad-label")
             .transition()
@@ -264,6 +268,8 @@ export default class Chart{
             .attr("y", yscl(bad) + 15)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
+            .style("fill", "rgba(200, 0, 0, 0.6)")
+
 
         svg.select(".yaxis")
             .transition()
@@ -308,6 +314,9 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(good))
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
+            .style("stroke", "rgba(0, 128, 0, 0.6)")
+            .style("stroke-width", "2px")
+
 
         svg.select(".bad-line")
             .transition()
@@ -318,6 +327,8 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(bad))
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
+            .style("stroke", "rgba(200, 0, 0, 0.6)")
+            .style("stroke-width", "2px")
             
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
