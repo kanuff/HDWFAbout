@@ -30,9 +30,18 @@ const typingWord = (queryInput) => {
         "bears",
         "beets",
         "Congress",
-        "paper Sales",
+        "paper sales",
         "cheese",
-        "the news"
+        "the news",
+        "penguins",
+        "the senate",
+        "the democratic debate",
+        "the 2020 election",
+        "SpaceX",
+        "artificial intelligence",
+        "healthcare",
+        "virtual reality",
+        "dogs"
     ]
     const str = options[Math.floor(Math.random() * options.length)]
     let i = 0;
@@ -52,7 +61,7 @@ const typingWord = (queryInput) => {
             }, 1500)
             
         }
-    }, 300)
+    }, 200)
     queryInput.addEventListener("focus", clearInput(queryInput, cycle))
 }
 
