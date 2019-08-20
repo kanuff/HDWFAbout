@@ -194,10 +194,8 @@ export default class Chart{
         } else {
             initialize_duration = 0
         }
-        console.log(this.initialize)
-        console.log(initialize_duration)
         this.initialize = initialRender(svg, initialize_duration)
-
+        conditionalTitleColor(total)
         scatterData.forEach(datum => {
             ydata.push(datum.y)
             xdata.push(datum.x)
@@ -256,7 +254,7 @@ export default class Chart{
             .attr("y", yscl(good) - 5)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
-            .style("fill", "rgba(0, 128, 0, 0.6)")
+            .style("fill", "rgb(32, 196, 168)")
 
 
         svg.select(".bad-label")
@@ -296,7 +294,7 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(1700)
             .attr("class", "line")
-            .style("stroke", "rgba(0, 0, 139, 0.8)")
+            .style("stroke", "rgba(0, 0, 139)")
             .attr("d", line)
 
         svg.select(".good-line")
@@ -309,9 +307,9 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(good))
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
-            .style("stroke", "rgba(0, 128, 0, 0.6)")
+            .style("stroke", "rgb(32, 196, 168)")
             .style("stroke-width", "2px")
-
+// rgb(32, 196, 168)
 
         svg.select(".bad-line")
             .transition()

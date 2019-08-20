@@ -6,11 +6,11 @@ const conditionalTitleColor = (total) => {
         .duration(2000)
         .style("color", d => {
             if (d.average > 0.13) {
-                return `rgba(${40 * Math.sqrt(d.average)}, ${128 * Math.sqrt(d.average)}, ${40 * Math.sqrt(d.average)}, 0.97)`
+                return `rgba(${32 * Math.sqrt(d.average)}, ${196 * Math.sqrt(d.average)}, ${168 * Math.sqrt(d.average)}, 0.97)`
             } else if (d.average < -0.13) {
                 return `rgba(${128 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, 0.97)`
             } else {
-                return `rgba(${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, 0.8)`
+                return `rgba(255,255,255,0.8)`
             }
         })
     d3.select("#second-title")
@@ -20,11 +20,11 @@ const conditionalTitleColor = (total) => {
         .duration(2000)
         .style("color", d => {
             if (d.average > 0.13) {
-                return `rgba(${40 * Math.sqrt(d.average)}, ${128 * Math.sqrt(d.average)}, ${40 * Math.sqrt(d.average)}, 0.97)`
+                return `rgba(${32 * Math.sqrt(d.average)}, ${196 * Math.sqrt(d.average)}, ${168 * Math.sqrt(d.average)}, 0.97)`
             } else if (d.average < -0.13) {
                 return `rgba(${128 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, 0.97)`
             } else {
-                return `rgba(${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, ${255 * Math.sqrt(Math.abs(d.average))}, 0.8)`
+                return `rgba(255,255,255,0.8)`
             }
         })
 }
@@ -50,9 +50,9 @@ const conditionalDisplay = (attr_value, cutoff, greaterThan = true) => {
 
 const conditionalOpacity = (d, good, bad) => {
     if (d.y >= good) {
-        return "0.5"
+        return "0.8"
     } else if (d.y <= bad) {
-        return "0.5"
+        return "0.6"
     } else {
         return "0.3"
     }
@@ -60,7 +60,7 @@ const conditionalOpacity = (d, good, bad) => {
 
 const conditionalColor = (d, good, bad, opacity=1) => {
     if (d.y >= good) {
-        return `rgba(0,128,0, ${opacity}`
+        return `rgba(32,196,168, ${opacity}`
     } else if (d.y <= bad) {
         return `rgba(255,0,0, ${opacity}`
     } else {

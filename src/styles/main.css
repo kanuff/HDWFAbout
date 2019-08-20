@@ -8,7 +8,8 @@
 
 html {
 	/* background-color: rgba(36, 167, 248, 0.9); */
-	background-image: linear-gradient(rgba(36, 167, 248, 0.9), rgba(36, 167, 248, 0.9),  rgba(0, 0, 139, 0.85));
+	/* background-image: linear-gradient(rgba(36, 167, 248, 0.9), rgba(36, 167, 248, 0.9),  rgba(0, 0, 139, 0.85)); */
+	background-image: linear-gradient(rgba(78, 93, 215, 0.75), rgba(78, 93, 215, 0.9),  rgba(0, 0, 139, 0.93));
 
 	/* background-color: rgba(0, 68, 255, 0.795); */
 	/* background-color: rgba(0, 0, 139, 0.85); */
@@ -17,6 +18,7 @@ html {
 
 html * {
 	color: rgba(255, 255, 255, 0.8);
+	/* color: rgba(78, 93, 215, 0.9); */
 }
 
 body {
@@ -70,8 +72,12 @@ body > div {
 	background-color: transparent;
 }
 
+.query-field::placeholder{
+	color: rgba(255,255,255, 0.25);
+}
+
 .query-field:hover{
-	background-color: rgb(255,255,255, 0.1);
+	background-color: rgba(255,255,255, 0.1);
 	border-radius: 4px;
 }
 
@@ -94,7 +100,6 @@ body > div {
 }
 
 img {
-	width: 100%;
 	overflow: hidden;
 	padding-top: 5px;
 	padding-bottom: 10px;
@@ -107,13 +112,15 @@ li{
 .article-image{
 	opacity: 0;
 	margin:0 auto;
+	width: 100%;
+	max-height: 400px;
 }
 
 
 .article-info{
 	height: 100%;
 	margin-right: 5px;
-	background-color: rgba(255,255,255, 0.1);
+	background-color: rgba(255,255,255, 0.2);
 	background-color: transparent;
 	border-radius: 4px;
 	width: 33%;
@@ -135,6 +142,8 @@ svg {
 	width: 98%;
 	/* box-shadow: black 1px 1px 5px 0px; */
 	/* box-shadow: transparent; */
+	/* #f6cde1
+	#005eac */
 }
 
 .article-title {
@@ -326,11 +335,12 @@ ul {
 }
 
 .icon{
+	margin-top: 6px;
 	max-width: 30px;
 	min-width: 30px;
 	max-height: 30px;
 	max-height: 30px;
-	margin-left: 10px;
+	margin-left: 3px;
 }
 
 #linkedin-icon{
