@@ -106,8 +106,9 @@ const fillArticleInfo = (singleArticleInfo, d) => {
         .attr("href", `${d.url}`)
 }
 
-const handleDotUX = (d, bigDot, singleArticleInfo, speed=1) => {
-    const delay = 2100
+const handleDotUX = (d, bigDot, singleArticleInfo, speed = 1, intialize_duration = 0) => {
+    const delay = 2000 + intialize_duration
+    console.log(delay)
     if (speed >= 1){
         // setTimeout(() => {
             bigDot
@@ -186,6 +187,67 @@ const mergeLineData = (dateRange, lineData) => {
 
 
 
+const initialRender = (svg, intialize_duration, total) => {
+    // d3.select("#chart")
+    //     .transition()
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("box-shadow", "1px 1px 5px 0px black")
+    // d3.select("#articles-list")
+    //     .transition()
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("box-shadow", "1px 1px 5px 0px black")
+    // d3.select(".article-info")
+    //     .transition()
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("box-shadow", "1px 1px 5px 0px black")
+
+    // svg.select(".xaxis > path")
+    //     .transition("appear")
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("opacity", 1)
+
+    // svg.selectAll(".xaxis > .tick > line")
+    //     .transition("appear")
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("opacity", 1)
+    
+    // svg.select(".yaxis")
+    //     .transition("appear")
+    //     .ease(d3.easeCubic)
+    //     .duration(intialize_duration)
+    //     .style("opacity", 1)
+
+    d3.select("#main")
+        .transition("appear")
+        .ease(d3.easeCubic)
+        .duration(intialize_duration*0.6)
+        .style("top", "0px")
+        .style("background", "rgba(0,0,0,0.05)")
+
+    d3.select(".article-image")
+        .transition("appear")
+        .ease(d3.easeCubic)
+        .duration(intialize_duration + 300)
+        .style("opacity", 1)
+    
+
+    d3.select(".info-container")
+        .transition("appear")
+        .ease(d3.easeCubic)
+        .duration(intialize_duration+300)
+        .style("opacity", 1)
+
+    return false
+
+
+}
+
+
 export {
     conditionalTitleColor,
     conditionalDisplay,
@@ -195,5 +257,6 @@ export {
     handleDotUX,
     generateDateRange,
     sortDate,
-    mergeLineData
+    mergeLineData,
+    initialRender
 }

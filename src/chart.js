@@ -7,7 +7,8 @@ import {
     handleDotUX,
     generateDateRange,
     sortDate,
-    mergeLineData
+    mergeLineData,
+    initialRender
 } from './chart_utils'
 
 export default class Chart{
@@ -35,6 +36,7 @@ export default class Chart{
         this.endDate = new Date();
         this.dateRange = generateDateRange(this.startDate, this.endDate)
         this.xFormat = "%b-%d";
+        this.initialize = true;
     }
 
     dummyData(){
@@ -77,6 +79,14 @@ export default class Chart{
             .attr("class", `xaxis`)
             .call(x_axis)
 
+            
+
+        // svg.select(".xaxis > path")
+        //     .style("opacity", 0);
+
+        // svg.selectAll(".xaxis > .tick > line")
+        //     .style("opacity", 0);
+
 
         svg.select(".xaxis")
             .attr("transform", `translate(0,${yscl(0)})`)
@@ -88,9 +98,11 @@ export default class Chart{
             .style("text-anchor", "start")
             .style("opacity", 0)
 
+
         svg.append("g")
             .attr("class", `yaxis`)
             .call(y_axis.tickSize(0).tickSizeOuter(5))
+            .style("opacity", "0")
             .selectAll("text").remove()
 
         // create line generator
@@ -152,6 +164,22 @@ export default class Chart{
             .data([data])
             .attr("class", "line")
             .attr("d", line);
+
+
+        d3.select("#chart")
+            .style("box-shadow", "1px 1px 5px 0px black")
+        d3.select("#articles-list")
+            .style("box-shadow", "1px 1px 5px 0px black")
+        d3.select(".article-info")
+            .style("box-shadow", "1px 1px 5px 0px black")
+
+        // d3.select("#chart")
+        //     .style("box-shadow", "0px 0px 0px 0px black")
+
+        // d3.select("#articles-list")
+        //     .style("box-shadow", "0px 0px 0px 0px black")
+        // d3.select(".article-info")
+        //     .style("box-shadow", "0px 0px 0px 0px black")
     }
 
     render(payload){
@@ -161,9 +189,15 @@ export default class Chart{
         const xdata = []
         const singleArticleInfo = d3.select(".article-info-container")
         const lineData = mergeLineData(this.dateRange, payload.lineData)
-
-
-        conditionalTitleColor(total);
+        let initialize_duration
+        if (this.initialize){
+            initialize_duration = 1500
+        } else {
+            initialize_duration = 0
+        }
+        console.log(this.initialize)
+        console.log(initialize_duration)
+        this.initialize = initialRender(svg, initialize_duration)
 
         scatterData.forEach(datum => {
             ydata.push(datum.y)
@@ -188,17 +222,20 @@ export default class Chart{
 
         const labels = d3.selectAll(".label")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .style("color", "rgba(255,255,255, 0.7)");
         const readMore = d3.select(".read-more")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .style("color", "rgba(255,255,255, 0.7)");
 
         svg.select(".xaxis")
                 .transition()
+            .delay(initialize_duration)
                 .ease(d3.easeExp)
                 .duration(1700)
             .attr("transform", `translate(0,${yscl(0)})`)
@@ -214,6 +251,7 @@ export default class Chart{
 
         svg.select(".good-label")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("y", yscl(good) - 5)
@@ -224,6 +262,7 @@ export default class Chart{
 
         svg.select(".bad-label")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("y", yscl(bad) + 15)
@@ -234,6 +273,7 @@ export default class Chart{
 
         svg.select(".yaxis")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .call(y_axis.tickSize(0).tickSizeOuter(5))
@@ -253,6 +293,7 @@ export default class Chart{
         path
             .data([lineData])
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("class", "line")
@@ -261,6 +302,7 @@ export default class Chart{
 
         svg.select(".good-line")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("x1", 0)
@@ -274,6 +316,7 @@ export default class Chart{
 
         svg.select(".bad-line")
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("x1", 0)
@@ -324,6 +367,7 @@ export default class Chart{
 
         createDots
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("cx", d => { return xscl(parseTime(d.x)) })
@@ -376,6 +420,11 @@ export default class Chart{
                     .style("fill", "darkblue");                
             })
 
+        d3.selectAll(".article-list-item")
+            .transition("appear-articles")
+            .ease(d3.easeCubic)
+            .duration(1500)
+            .style("opacity", 1)
 
         articlesContainer
             .style("background", d => conditionalColor(d, good, bad, 0.3))
@@ -394,16 +443,17 @@ export default class Chart{
         let bigDot;
         updateDots
             .transition()
+            .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
             .attr("class", "dot")
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", function(d, i){
+            .attr("r", function (d, i){
                 let r;
                 if (d.title === total.highScore.title) {
                     bigDot = d3.select(this)
-                    handleDotUX(d, bigDot, singleArticleInfo);
+                    handleDotUX(d, bigDot, singleArticleInfo, 1, initialize_duration);
                     r = 20
                 } else {
                     r = 8

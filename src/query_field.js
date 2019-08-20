@@ -8,6 +8,8 @@ export default (props) => {
     const queryInput = document.createElement("input");
     queryInput.setAttribute("type", "text");
     queryInput.setAttribute("class", "query-field");
+    queryInput.setAttribute("z-index", "100");
+
 
     setTimeout( () =>{
         typingWord(queryInput);
@@ -74,7 +76,7 @@ const handleTyping = (event,props, queryInput) => {
     event.preventDefault();
     const chart = props.chart
     const value = queryInput.value;
-    console.log(`I WAS SUBMITTED WITH THE TEXT ${value}`)
+
     fetchEverythingFor(value)
         .then(response => {
             const payload = {}
