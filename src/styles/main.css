@@ -94,7 +94,7 @@ body > div {
 	display: flex;
 	background-color: transparent;
 	border-radius: 4px;
-	height: 89vh;
+	height: 91vh;
 	font-family: var(--title-font);
 	opacity: 0;
 }
@@ -254,9 +254,12 @@ svg {
 }
 
 footer{
-	margin-top: 5px;
+	/* margin-top: 5px; */
 	margin-right: 5px;
+	margin-bottom: 13px;
 	text-align: right;
+	height: 3px;
+	font-size: 7px;
 }
 
 /* .good-label, .bad-label{
