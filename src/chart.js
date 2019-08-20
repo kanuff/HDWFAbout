@@ -102,7 +102,6 @@ export default class Chart{
         svg.append("g")
             .attr("class", `yaxis`)
             .call(y_axis.tickSize(0).tickSizeOuter(5))
-            .style("opacity", "0")
             .selectAll("text").remove()
 
         // create line generator
@@ -348,7 +347,7 @@ export default class Chart{
                     .transition()
                     .ease(d3.easeElastic)
                     .duration(500)
-                    .attr("r", 20)
+                    .attr("r", 10)
 
                 d3.selectAll(".article-list-item")
                     .style("background", d => conditionalColor(d, good, bad, 0.3));
