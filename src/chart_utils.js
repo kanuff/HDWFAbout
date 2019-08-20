@@ -225,12 +225,13 @@ const initialRender = (svg, intialize_duration, total) => {
     d3.select("#main")
         .transition("appear")
         .ease(d3.easeCubic)
-        .duration(intialize_duration*0.6)
+        .duration(intialize_duration*0.8)
         .style("top", "0px")
-        .style("background", "rgba(0,0,0,0.05)")
+        // .style("background", "rgba(0,0,0,0.05)")
 
     d3.select(".article-image")
         .transition("appear")
+        .delay(500)
         .ease(d3.easeCubic)
         .duration(intialize_duration + 300)
         .style("opacity", 1)
@@ -238,6 +239,7 @@ const initialRender = (svg, intialize_duration, total) => {
 
     d3.select(".info-container")
         .transition("appear")
+        .delay(500)
         .ease(d3.easeCubic)
         .duration(intialize_duration+300)
         .style("opacity", 1)
