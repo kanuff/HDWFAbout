@@ -307,12 +307,15 @@ ul {
 .article-list-item{
 	width: 97%;
 	/* border: 1px solid red; */
-	padding: 8px;
-	margin: 8px auto;
+	padding: 12px 8px;
+	margin: 12px auto;
 	/* background: rgba(255,255,255, 0.1); */
 	border-radius: 4px;
 	cursor: pointer;
 	color: rgba(255,255,255, 0.7);
+	font-size: 17px;
+	line-height: 175%;
+	letter-spacing: 0.04em;
 }
 
 #articles-list::-webkit-scrollbar {
