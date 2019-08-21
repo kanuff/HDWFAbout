@@ -8,7 +8,8 @@ import {
     generateDateRange,
     sortDate,
     mergeLineData,
-    initialRender
+    initialRender,
+    handleArticleScroll
 } from './chart_utils'
 
 export default class Chart{
@@ -349,8 +350,7 @@ export default class Chart{
 
                 d3.selectAll(".article-list-item")
                     .style("background", d => conditionalColor(d, good, bad, 0.3));
-                d3.select(`#article_${i}`)
-                    .style("background", "rgba(0, 0, 139, 0.5)");
+                handleArticleScroll(i)
 
                 fillArticleInfo(singleArticleInfo, d)
             })
@@ -398,10 +398,11 @@ export default class Chart{
                     .style("opacity", d => conditionalOpacity(d, good, bad));
                 d3.select(`#dot_${i}`)
                     .attr("r", function (d, i) {
-                            bigDot = d3.select(this)
-                            handleDotUX(d, bigDot, singleArticleInfo, 0.2);
-                            return 20
+                        bigDot = d3.select(this)
+                        handleDotUX(d, bigDot, singleArticleInfo, 0.2);
+                        return 20
                     });
+                handleArticleScroll(i)
             })
             .on("mouseover", function(d,i){
                 d3.selectAll(".article-list-item")
@@ -451,6 +452,7 @@ export default class Chart{
                 if (d.title === total.highScore.title) {
                     bigDot = d3.select(this)
                     handleDotUX(d, bigDot, singleArticleInfo, 1, initialize_duration);
+                    handleArticleScroll(i)
                     r = 20
                 } else {
                     r = 8

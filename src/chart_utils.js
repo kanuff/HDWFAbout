@@ -108,7 +108,6 @@ const fillArticleInfo = (singleArticleInfo, d) => {
 
 const handleDotUX = (d, bigDot, singleArticleInfo, speed = 1, intialize_duration = 0) => {
     const delay = 2000 + intialize_duration
-    console.log(delay)
     if (speed >= 1){
         // setTimeout(() => {
             bigDot
@@ -227,7 +226,6 @@ const initialRender = (svg, intialize_duration, total) => {
         .ease(d3.easeCubic)
         .duration(intialize_duration*0.8)
         .style("top", "0px")
-        // .style("background", "rgba(0,0,0,0.05)")
 
     d3.select(".article-image")
         .transition("appear")
@@ -248,6 +246,31 @@ const initialRender = (svg, intialize_duration, total) => {
 
 }
 
+const handleArticleScroll = i => {
+    document.getElementById(`article_${i}`).scrollIntoView({
+        behavior: "smooth",
+        block: "center"
+    })
+    d3.select(`#article_${i}`)
+        .style("background", "rgba(0, 0, 139, 0.5)")
+    //     .style("transform", "rotateX(0deg)");
+
+    // if ( i > 3 ){
+    //     d3.select(`#article_${i-1}`)
+    //         .style("opacity", "0.4")
+    //         .style("transform", "rotateX(10deg)");
+    //     d3.select(`#article_${i-2}`)
+    //         .style("opacity", "0.3")
+    //         .style("transform", "rotateX(15deg)");
+    //     d3.select(`#article_${i+1}`)
+    //         .style("opacity", "0.4")
+    //         .style("transform", "rotateX(-10deg)");
+    //     d3.select(`#article_${i+2}`)
+    //         .style("opacity", "0.3")
+    //         .style("transform", "rotateX(-15deg)");
+    // }
+
+}
 
 export {
     conditionalTitleColor,
@@ -259,5 +282,6 @@ export {
     generateDateRange,
     sortDate,
     mergeLineData,
-    initialRender
+    initialRender,
+    handleArticleScroll
 }
