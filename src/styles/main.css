@@ -109,7 +109,9 @@ body > div {
 } */
 
 .info-container {
-	margin-top: 50px;
+	/* margin-top: 50px; */
+	padding: 50px;
+	padding-bottom: 0px;
 	display: flex;
 	background-color: transparent;
 	border-radius: 4px;
@@ -230,13 +232,8 @@ svg {
 	height: 90%;
 	overflow-y: scroll;
 	overflow-x: hidden;
-	/* -webkit-transition: fill 0.15s, opacity 0.15s, background-color 1s;
-	-moz-transition:    fill 0.15s, opacity 0.15s, background-color 1s;
-	-ms-transition:     fill 0.15s, opacity 0.15s, background-color 1s;
-	-o-transition:      fill 0.15s, opacity 0.15s, background-color 1s;
-	transition:         fill 0.15s, opacity 0.15s, background-color 1s; */
 	border-radius: 4px;
-	padding: 8.5px;
+	padding: 25px;
 	padding-bottom: 15px;
 }
 
@@ -281,16 +278,6 @@ footer{
 	font-size: 7px;
 }
 
-/* .good-label, .bad-label{
-	letter-spacing: 0.07em;
-	margin-left: -25px;
-	padding-right: 15px;
-} */
-
-
-/* path{
-	fill: whitesmoke;
-} */
 
 .articles-list-container{
 	height: 44%;
