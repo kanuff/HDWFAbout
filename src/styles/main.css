@@ -174,8 +174,8 @@ svg {
 }
 
 .article-title-container{
-	max-height: 115px;
-	overflow: hidden;
+	/* max-height: 115px; */
+	/* overflow: hidden; */
 }
 
 .flex-row {
