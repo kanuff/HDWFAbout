@@ -221,11 +221,20 @@ const initialRender = (svg, intialize_duration, total) => {
     //     .duration(intialize_duration)
     //     .style("opacity", 1)
 
+    d3.select("html")
+        .transition()
+        .ease(d3.easeLinear)
+        .duration(intialize_duration)
+        .style("background-image", "linear-gradient(rgba(112, 112, 112, 0.7), rgba(100, 100, 100, 0.6))")
+
+
+
     d3.select("#main")
         .transition("appear")
         .ease(d3.easeCubic)
         .duration(intialize_duration*0.8)
         .style("top", "0px")
+
 
     d3.select(".article-image")
         .transition("appear")
@@ -233,7 +242,7 @@ const initialRender = (svg, intialize_duration, total) => {
         .ease(d3.easeCubic)
         .duration(intialize_duration + 300)
         .style("opacity", 1)
-    
+
     d3.select(".info-container")
         .transition("appear")
         .delay(800)

@@ -6,7 +6,6 @@ import {
     fillArticleInfo,
     handleDotUX,
     generateDateRange,
-    sortDate,
     mergeLineData,
     initialRender,
     handleArticleScroll
@@ -27,8 +26,7 @@ export default class Chart{
         this.width = 810 - this.margin.left - this.margin.right;
         this.height = 370 - this.margin.top - this.margin.bottom;
         this.svg = d3.select('svg')
-            .attr('width', this.width + this.margin.left + this.margin.right)
-            .attr('height', this.height + this.margin.top + this.margin.bottom)
+            .attr("viewBox", `0 0 ${this.width + this.margin.left + this.margin.right} ${this.height + this.margin.top + this.margin.bottom}`)
             .style('background-color', 'transparent')
             .append("g")
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
@@ -106,10 +104,10 @@ export default class Chart{
             .selectAll("text").remove()
 
         // create line generator
-        const line = d3.line()
-            .x(d => { return xscl(parseTime(d.x)); })
-            .y(d => { return yscl(d.y); })
-            .curve(d3.curveBundle.beta(0.85));
+        // const line = d3.line()
+        //     .x(d => { return xscl(parseTime(d.x)); })
+        //     .y(d => { return yscl(d.y); })
+        //     .curve(d3.curveBundle.beta(0.85));
 
         //good-label
         svg.append("text")
@@ -156,20 +154,20 @@ export default class Chart{
             .style("stroke-dasharray", ("3, 3"))
 
         // draw the line
-        svg.append('path')
-            .attr("fill", "none")
-            .attr("stroke", "transparent")
-            .attr("stroke-width", "3px")
-            .attr("stroke-linecap", "round")
-            .data([data])
-            .attr("class", "line")
-            .attr("d", line);
+        // svg.append('path')
+        //     .attr("fill", "none")
+        //     .attr("stroke", "transparent")
+        //     .attr("stroke-width", "3px")
+        //     .attr("stroke-linecap", "round")
+        //     .data([data])
+        //     .attr("class", "line")
+        //     .attr("d", line);
 
 
-        d3.select("#chart")
-            .style("box-shadow", "1px 1px 5px 0px black")
-        d3.select("#articles-list")
-            .style("box-shadow", "1px 1px 5px 0px black")
+        // d3.select("#chart")
+        //     .style("box-shadow", "1px 1px 5px 0px black")
+        // d3.select("#articles-list")
+        //     .style("box-shadow", "1px 1px 5px 0px black")
         d3.select(".article-info")
             .style("box-shadow", "1px 1px 5px 0px black")
 
@@ -282,21 +280,21 @@ export default class Chart{
 
 
 
-        const line = d3.line()
-            .x(d => { return xscl(parseTime(d.x)); })
-            .y(d => { return yscl(d.y); })
-            .curve(d3.curveBundle.beta(0.85));
+        // const line = d3.line()
+        //     .x(d => { return xscl(parseTime(d.x)); })
+        //     .y(d => { return yscl(d.y); })
+        //     .curve(d3.curveBundle.beta(0.85));
 
-        const path = svg.selectAll('.line');
-        path
-            .data([lineData])
-            .transition()
-            .delay(initialize_duration)
-            .ease(d3.easeExp)
-            .duration(1700)
-            .attr("class", "line")
-            .style("stroke", "rgba(0, 0, 139)")
-            .attr("d", line)
+        // const path = svg.selectAll('.line');
+        // path
+        //     .data([lineData])
+        //     .transition()
+        //     .delay(initialize_duration)
+        //     .ease(d3.easeExp)
+        //     .duration(1700)
+        //     .attr("class", "line")
+        //     .style("stroke", "rgba(0, 0, 139)")
+        //     .attr("d", line)
 
         svg.select(".good-line")
             .transition()
