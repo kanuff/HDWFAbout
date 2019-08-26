@@ -11,6 +11,7 @@ With HDWFAbout, users will be able to:
 - [ ] Search any word or phrase
 - [ ] Sort articles based on sentiment
 - [ ] Read any article from within the daterange
+- [ ] Zoome in on the distribution for a given day
 
 
 Additional features for this project are:
