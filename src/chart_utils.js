@@ -221,17 +221,17 @@ const initialRender = (svg, intialize_duration, total) => {
     //     .duration(intialize_duration)
     //     .style("opacity", 1)
 
-    d3.select("html")
-        .transition()
-        .ease(d3.easeLinear)
-        .duration(intialize_duration)
-        .style("background-image", "linear-gradient(rgba(112, 112, 112, 0.7), rgba(100, 100, 100, 0.6))")
+    // d3.select("html")
+    //     .transition()
+    //     .ease(d3.easeLinear)
+    //     .duration(intialize_duration)
+    //     .style("background-image", "linear-gradient(rgba(112, 112, 112, 0.7), rgba(100, 100, 100, 0.6))")
 
 
 
     d3.select("#main")
         .transition("appear")
-        .ease(d3.easeCubic)
+        .ease(d3.easeQuad)
         .duration(intialize_duration*0.8)
         .style("top", "0px")
 
@@ -239,14 +239,14 @@ const initialRender = (svg, intialize_duration, total) => {
     d3.select(".article-image")
         .transition("appear")
         .delay(800)
-        .ease(d3.easeCubic)
+        .ease(d3.easeQuad)
         .duration(intialize_duration + 300)
         .style("opacity", 1)
 
     d3.select(".info-container")
         .transition("appear")
         .delay(800)
-        .ease(d3.easeCubic)
+        .ease(d3.easeQuad)
         .duration(intialize_duration+300)
         .style("opacity", 1)
 
@@ -281,7 +281,25 @@ const handleArticleScroll = i => {
 
 }
 
+const conditionalBackgroundColor = (total) => {
+    d3.select("html")
+        .data([total])
+        .transition()
+        .ease(d3.easeQuad)
+        .duration(2000)
+        .style("background-color", d => {
+            if (d.average > 0.13) {
+                return `rgba(${32 * Math.sqrt(d.average)}, ${196 * Math.sqrt(d.average)}, ${168 * Math.sqrt(d.average)}, 0.97)`
+            } else if (d.average < -0.13) {
+                return `rgba(${128 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, ${40 * Math.sqrt(Math.abs(d.average))}, 0.97)`
+            } else {
+                return `rgba(50,50,50,0.8)`
+            }
+        })
+}
+
 export {
+    conditionalBackgroundColor,
     conditionalTitleColor,
     conditionalDisplay,
     conditionalOpacity,

@@ -1,4 +1,5 @@
 import {
+    conditionalBackgroundColor,
     conditionalColor,
     conditionalDisplay,
     conditionalOpacity,
@@ -73,12 +74,13 @@ export default class Chart{
         const y_axis = d3.axisLeft()
             .scale(yscl)
 
-        svg.append("g")
+
+
+
+        this.gX = svg.append("g")
             .attr("transform", `translate(0,${(yscl(0))})`)
             .attr("class", `xaxis`)
             .call(x_axis)
-
-            
 
         // svg.select(".xaxis > path")
         //     .style("opacity", 0);
@@ -98,7 +100,7 @@ export default class Chart{
             .style("opacity", 0)
 
 
-        svg.append("g")
+        this.gY = svg.append("g")
             .attr("class", `yaxis`)
             .call(y_axis.tickSize(0).tickSizeOuter(5))
             .selectAll("text").remove()
@@ -153,6 +155,14 @@ export default class Chart{
             .attr("class", "bad-line")
             .style("stroke-dasharray", ("3, 3"))
 
+
+        d3.select(".article-info")
+            .style("box-shadow", "1px 1px 5px 0px black")
+
+        svg.append("rect")
+            .attr("width", width)
+            .attr("height", height)
+            .attr("class", "zoom-window")
         // draw the line
         // svg.append('path')
         //     .attr("fill", "none")
@@ -168,8 +178,7 @@ export default class Chart{
         //     .style("box-shadow", "1px 1px 5px 0px black")
         // d3.select("#articles-list")
         //     .style("box-shadow", "1px 1px 5px 0px black")
-        d3.select(".article-info")
-            .style("box-shadow", "1px 1px 5px 0px black")
+
 
         // d3.select("#chart")
         //     .style("box-shadow", "0px 0px 0px 0px black")
@@ -182,7 +191,7 @@ export default class Chart{
 
     render(payload){
         const { scatterData, total } = payload
-        const { svg, height, width, good, bad, xFormat } = this
+        const { svg, height, width, good, bad, xFormat, margin, gX, gY } = this
         const ydata = []
         const xdata = []
         const singleArticleInfo = d3.select(".article-info-container")
@@ -194,7 +203,9 @@ export default class Chart{
             initialize_duration = 0
         }
         this.initialize = initialRender(svg, initialize_duration)
-        conditionalTitleColor(total)
+        conditionalTitleColor(total);
+        conditionalBackgroundColor(total);
+
         scatterData.forEach(datum => {
             ydata.push(datum.y)
             xdata.push(datum.x)
@@ -228,6 +239,10 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(1700)
             .style("color", "rgba(255,255,255, 0.7)");
+
+
+
+
 
         svg.select(".xaxis")
                 .transition()
@@ -322,11 +337,36 @@ export default class Chart{
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
             .style("stroke", "rgba(200, 0, 0, 0.6)")
             .style("stroke-width", "2px")
+
+        const zoom = d3.zoom()
+            .scaleExtent([1, 20])
+            .extent([[0, 0], [width, height]])
+            .on("zoom", updateChart); //sourced from https://www.d3-graph-gallery.com/graph/interactivity_zoom.html
+
+        d3.select(".zoom-window")
+            .style("fill", "transparent")
+            .style("pointer-events", "painted")
+            .call(zoom)
+
+        function updateChart() {
+            console.log("Zooming")
+            const newX = d3.event.transform.rescaleX(xscl)
+            const newY = d3.event.transform.rescaleY(yscl)
+
+            gX.call(x_axis.scale(newX));
+            gY.call(y_axis.scale(newY));
+
+            updateDots
+                .attr("cx", d => { return newX(parseTime(d.x)) })
+                .attr("cy", d => { return newY(d.y) })
+        }
+
             
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
             .enter().append("circle")
             .attr("class", "dot")
+
             
         createDots
             .on("click", d => {
@@ -359,6 +399,7 @@ export default class Chart{
                     .duration(500)
                     .attr("r", 8)
             })
+
 
         createDots
             .transition()
@@ -463,5 +504,23 @@ export default class Chart{
         svg.selectAll(".dot")
             .data(scatterData)
             .exit().remove();
+
+
+        // const parseTime = d3.timeParse("%Y-%m-%d")
+
+        // const xscl = d3.scaleTime()
+        //     .domain(d3.extent(lineData, d => { return parseTime(d.x) }))
+        //     .range([0, width]);
+
+        // const x_axis = d3.axisBottom()
+        //     .scale(xscl)
+
+        // const yscl = d3.scaleLinear()
+        //     .domain([d3.max(ydata), d3.min(ydata)])
+        //     .range([0, height]);
+
+        // const y_axis = d3.axisLeft()
+        //     .scale(yscl)
+
     }
 }
