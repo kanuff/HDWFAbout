@@ -192,11 +192,7 @@ svg {
 	font-weight: 600;
 	font-size: 17px;
 	text-decoration: underline;
-	color: transparent;
 	/* color: rgba(0, 0, 139, 0.5); */
-}
-.read-more{
-	color: transparent
 }
 
 .info {
