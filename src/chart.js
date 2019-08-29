@@ -145,6 +145,7 @@ export default class Chart{
             .attr("width", width)
             .attr("height", height)
             .attr("class", "zoom-window")
+            .style("fill", "transparent")
     }
 
     render(payload){
@@ -260,28 +261,27 @@ export default class Chart{
             .style("stroke", "rgba(200, 0, 0, 0.6)")
             .style("stroke-width", "2px")
 
-        const zoom = d3.zoom()
-            .scaleExtent([1, 20])
-            .extent([[0, 0], [width, height]])
-            .on("zoom", updateChart); //sourced from https://www.d3-graph-gallery.com/graph/interactivity_zoom.html
+        // const zoom = d3.zoom()
+        //     .scaleExtent([1, 20])
+        //     .extent([[0, 0], [width, height]])
+        //     .on("zoom", updateChart); //sourced from https://www.d3-graph-gallery.com/graph/interactivity_zoom.html
 
-        d3.select(".zoom-window")
-            .style("fill", "transparent")
-            .style("pointer-events", "painted")
-            .call(zoom)
+        // d3.select(".zoom-window")
+        //     .style("pointer-events", "painted")
+        //     .call(zoom)
 
-        function updateChart() {
-            console.log("Zooming")
-            const newX = d3.event.transform.rescaleX(xscl)
-            const newY = d3.event.transform.rescaleY(yscl)
+        // function updateChart() {
+        //     console.log("Zooming")
+        //     const newX = d3.event.transform.rescaleX(xscl)
+        //     const newY = d3.event.transform.rescaleY(yscl)
 
-            gX.call(x_axis.scale(newX));
-            gY.call(y_axis.scale(newY));
+        //     gX.call(x_axis.scale(newX));
+        //     gY.call(y_axis.scale(newY));
 
-            updateDots
-                .attr("cx", d => { return newX(parseTime(d.x)) })
-                .attr("cy", d => { return newY(d.y) })
-        }
+        //     updateDots
+        //         .attr("cx", d => { return newX(parseTime(d.x)) })
+        //         .attr("cy", d => { return newY(d.y) })
+        // }
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)
