@@ -187,67 +187,26 @@ const mergeLineData = (dateRange, lineData) => {
 
 
 const initialRender = (svg, intialize_duration, total) => {
-    // d3.select("#chart")
-    //     .transition()
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("box-shadow", "1px 1px 5px 0px black")
-    // d3.select("#articles-list")
-    //     .transition()
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("box-shadow", "1px 1px 5px 0px black")
-    // d3.select(".article-info")
-    //     .transition()
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("box-shadow", "1px 1px 5px 0px black")
-
-    // svg.select(".xaxis > path")
-    //     .transition("appear")
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("opacity", 1)
-
-    // svg.selectAll(".xaxis > .tick > line")
-    //     .transition("appear")
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("opacity", 1)
-    
-    // svg.select(".yaxis")
-    //     .transition("appear")
-    //     .ease(d3.easeCubic)
-    //     .duration(intialize_duration)
-    //     .style("opacity", 1)
-
-    // d3.select("html")
-    //     .transition()
-    //     .ease(d3.easeLinear)
-    //     .duration(intialize_duration)
-    //     .style("background-image", "linear-gradient(rgba(112, 112, 112, 0.7), rgba(100, 100, 100, 0.6))")
-
-
 
     d3.select("#main")
         .transition("appear")
         .ease(d3.easeQuad)
-        .duration(intialize_duration*0.8)
+        .duration(intialize_duration-1500)
         .style("top", "0px")
 
 
     d3.select(".article-image")
         .transition("appear")
         .delay(800)
-        .ease(d3.easeQuad)
-        .duration(intialize_duration + 300)
+        .ease(d3.easeExp)
+        .duration(intialize_duration + 1000)
         .style("opacity", 1)
 
     d3.select(".info-container")
         .transition("appear")
         .delay(800)
-        .ease(d3.easeQuad)
-        .duration(intialize_duration+300)
+        .ease(d3.easeExp)
+        .duration(intialize_duration+1000)
         .style("opacity", 1)
 
     return false
