@@ -9,9 +9,10 @@ When a topic has a particularly large change in sentiment (_dS_) over a short pe
 With HDWFAbout, users will be able to:
 
 - [ ] Search any word or phrase
-- [ ] Adjust the daterange parameters
-- [ ] Select a specific day and read an article from that day
-- [ ] Change the value of (_dS/dt_) that triggers the secondary in-depth query for historical events
+- [ ] Sort articles based on sentiment
+- [ ] Read any article from within the daterange
+- [ ] Zoom in on the distribution for a given day
+
 
 Additional features for this project are:
 - [ ] Filtering articles by location
