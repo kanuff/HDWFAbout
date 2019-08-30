@@ -215,7 +215,7 @@ svg {
 }
 
 .articles-container{
-	background-image: linear-gradient(rgba(180, 180, 180, 0.7), rgba(0, 0, 0, 0.9));
+	background-image: linear-gradient(rgba(150, 150, 150, 0.7), rgba(0, 0, 0, 0.9));
 	border-radius: 20px;
 	padding: 25px;
 	padding-top: 0;

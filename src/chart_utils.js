@@ -83,14 +83,7 @@ const fillArticleInfo = (singleArticleInfo, d) => {
         .ease(d3.easeExp)
         .duration(1700)
         .style("color", "rgba(255,255,255, 0.5)");
-    // singleArticleInfo.select(".article-sentiment")
-    //     .text(
-    //         `${d.y}`
-    //     );
-    // singleArticleInfo.select(".article-relevance")
-    //     .text(
-    //         `${d.relevance}`
-    //     );
+
     singleArticleInfo.select(".article-description")
         .text(
             `${d.description}`
@@ -221,22 +214,6 @@ const handleArticleScroll = i => {
     })
     d3.select(`#article_${i}`)
         .style("background", "rgba(0, 0, 139, 0.5)")
-    //     .style("transform", "rotateX(0deg)");
-
-    // if ( i > 3 ){
-    //     d3.select(`#article_${i-1}`)
-    //         .style("opacity", "0.4")
-    //         .style("transform", "rotateX(10deg)");
-    //     d3.select(`#article_${i-2}`)
-    //         .style("opacity", "0.3")
-    //         .style("transform", "rotateX(15deg)");
-    //     d3.select(`#article_${i+1}`)
-    //         .style("opacity", "0.4")
-    //         .style("transform", "rotateX(-10deg)");
-    //     d3.select(`#article_${i+2}`)
-    //         .style("opacity", "0.3")
-    //         .style("transform", "rotateX(-15deg)");
-    // }
 
 }
 
