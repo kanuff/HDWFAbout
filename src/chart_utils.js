@@ -180,6 +180,12 @@ const mergeLineData = (dateRange, lineData) => {
 
 
 const initialRender = (svg, intialize_duration, total) => {
+    d3.select("html")
+        .transition("appear")
+        .ease(d3.easeQuad)
+        .duration(intialize_duration - 1500)
+        .attr("background-image", "none" )
+        // .attr("background-image", "linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, 0))" )
 
     d3.select("#main")
         .transition("appear")

@@ -11,7 +11,7 @@ html {
 	/* background-image: linear-gradient(rgba(36, 167, 248, 0.9), rgba(36, 167, 248, 0.9),  rgba(0, 0, 139, 0.85)); */
 	/* background-image: linear-gradient(rgba(78, 93, 215, 0.75), rgba(78, 93, 215, 0.9),  rgba(0, 0, 139, 0.93)); */
 	/* background-image: linear-gradient(rgba(215, 215, 215, 0.9),   rgba(50, 50, 50, 1),rgba(0, 0, 0, 0.9)); */
-	background-color: rgba(0, 0, 0, 0.7);
+	/* background-color: rgba(0, 0, 0, 0.7); */
 	background-image: linear-gradient(rgba(255, 255, 255, 0.7), rgba(0, 0, 0, 0.7));
 
 	/* background-color: rgba(0, 68, 255, 0.795); */
@@ -203,7 +203,6 @@ svg {
 	/* color: rgba(255,255,255, 0.5); */
 	font-size: 17px;
 }
-
 
 .article-title{
 	font-size: 24px;
