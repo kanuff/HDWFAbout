@@ -295,9 +295,13 @@ footer{
 	width: 100%;
 }
 
+h4 {
+	margin: 0;
+}
+
 #articles-list {
 	margin-bottom: -4px;
-	margin-top: 15px;
+	margin-top: 5px;
 	height: 100%;
 	overflow-y: scroll;
 	overflow-x: hidden;
