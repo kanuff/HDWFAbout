@@ -390,7 +390,9 @@ li {
 	top: 75px;
 	right: 75px;
 	width: 50%;
+	height: 20%;
 	font-size: 20px;
+	padding-top:150px;
 	line-height: 175%;
 }
 
