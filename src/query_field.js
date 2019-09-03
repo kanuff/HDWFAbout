@@ -18,7 +18,11 @@ export default (props) => {
     form.appendChild(queryInput)
     form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
     // form.addEventListener("submit", () => { handleTyping(event, props, queryInput)})
-    form.addEventListener("submit", () => { event.preventDefault()})
+    form.addEventListener("submit", () => {
+        event.preventDefault()
+
+        handleTyping(event, props, queryInput)
+    })
                             
     return (
         form
@@ -55,8 +59,8 @@ const typingWord = (queryInput) => {
             queryInput.setAttribute("placeholder", str.slice(0, i))
         }
         if (i >= str.length){
+            queryInput.removeEventListener("focus", clearInput(queryInput, cycle));
             clearInterval(cycle)
-            queryInput.removeEventListener("focus", clearInput(queryInput, cycle))
             setTimeout(()=>{
                 queryInput.setAttribute("placeholder", "")
                 typingWord(queryInput)
