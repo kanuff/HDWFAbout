@@ -18,8 +18,8 @@ export default class Chart{
         this.margin = {
             top: 30,
             right: 20,
-            bottom: 50,
-            left: 20,
+            bottom: 30,
+            left: 30,
         }
         this.cutoff = 3
         this.good = this.cutoff
@@ -89,11 +89,10 @@ export default class Chart{
             .style("text-anchor", "start")
             .style("opacity", 0)
 
-
         this.gY = svg.append("g")
             .attr("class", `yaxis`)
-            .call(y_axis.tickSize(0).tickSizeOuter(5))
-            .selectAll("text").remove()
+            .call(y_axis.tickSizeOuter(5))
+            .selectAll("text").style("fill", "rgba(0,0,0,0)")
 
         //good-label
         svg.append("text")
@@ -102,7 +101,8 @@ export default class Chart{
             .attr("class", "good-label")
             .attr("text-anchor", "right")
             .style("fill", "transparent")
-            .text("+ sentiment")
+            .text("mostly positive")
+            // .text("+ sentiment")
 
         //bad-label
         svg.append("text")
@@ -111,7 +111,8 @@ export default class Chart{
             .attr("class", "bad-label")
             .attr("text-anchor", "right")
             .style("fill", "transparent")
-            .text("- sentiment")
+            .text("mostly negative")
+            // .text("- sentiment")
 
         //build good-line
         svg.append("line")
@@ -184,7 +185,15 @@ export default class Chart{
             .range([0, height]);
 
         const y_axis = d3.axisLeft()
+            // .tickValues([bad, 0, good])
+            .tickFormat( function(d,i) {
+                // if(d === bad) return "negative"
+                if(d === 0) return "moderate"
+                // if(d === good) return "positive"
+            })
+            .tickValues([0])
             .scale(yscl)
+
 
         svg.select(".xaxis")
                 .transition()
@@ -199,7 +208,7 @@ export default class Chart{
                 .attr("dy", ".35em")
                 .attr("transform", "rotate(90)")
                 .style("text-anchor", "start")
-                .style("fill", "white")
+                .style("fill", "rgba(255,255,255,1)")
                 .style("opacity", 1)
 
         svg.select(".good-label")
@@ -211,7 +220,6 @@ export default class Chart{
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
             .style("fill", "rgb(32, 196, 168)")
-
 
         svg.select(".bad-label")
             .transition()
@@ -229,11 +237,16 @@ export default class Chart{
             .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
-            .call(y_axis.tickSize(0).tickSizeOuter(5))
+            .call(y_axis.tickSizeOuter(5))
             .selectAll("text")
-            .style("fill", "white");
+            .style("fill", "rgba(255,255,255,1)");
+
         svg.select(".yaxis")
-            .selectAll("text").remove()
+            .selectAll("text")
+            .attr("transform", `translate(-25, -43) rotate(-90)`)
+            .attr("font-size", "15px")
+            .attr("letter-spacing", "0.12em")
+
 
         svg.select(".good-line")
             .transition()
@@ -319,7 +332,6 @@ export default class Chart{
                     .duration(500)
                     .attr("r", 8)
             })
-
 
         createDots
             .transition()
@@ -424,6 +436,5 @@ export default class Chart{
         svg.selectAll(".dot")
             .data(scatterData)
             .exit().remove();
-
     }
 }

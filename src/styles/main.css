@@ -285,6 +285,9 @@ footer{
 	font-size: 7px;
 }
 
+.articles-label{
+	border-bottom: 1px solid white;
+}
 
 .articles-list-container{
 	height: 44%;
@@ -314,7 +317,7 @@ h4 {
 }
 
 .article-list-item{
-	width: 97%;
+	width: 93%;
 	padding: 8px 12px;
 	margin: 8px auto;
 	border-radius: 4px;
