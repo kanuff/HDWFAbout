@@ -37,6 +37,7 @@ export default class Chart{
         this.dateRange = generateDateRange(this.startDate, this.endDate)
         this.xFormat = "%b-%d";
         this.initialize = true;
+        this.selectedDot = {};
     }
 
     dummyData(){
@@ -153,7 +154,6 @@ export default class Chart{
         const { scatterData, total } = payload
         const { svg, height, width, good, bad, xFormat, margin, gX, gY } = this
         const ydata = []
-        const xdata = []
         const singleArticleInfo = d3.select(".article-info-container")
         const lineData = mergeLineData(this.dateRange, payload.lineData)
         let initialize_duration
@@ -168,7 +168,6 @@ export default class Chart{
 
         scatterData.forEach(datum => {
             ydata.push(datum.y)
-            xdata.push(datum.x)
         })
 
         const parseTime = d3.timeParse("%Y-%m-%d")
@@ -193,7 +192,6 @@ export default class Chart{
             })
             .tickValues([0])
             .scale(yscl)
-
 
         svg.select(".xaxis")
                 .transition()
@@ -302,16 +300,22 @@ export default class Chart{
             .attr("class", "dot")
 
         createDots
-            .on("click", d => {
-                window.open(d.url, "_blank")
-            })
-            .on("mouseover", function(d,i) {
+            .on("click", function(d){
+                // window.open(d.url, "_blank")
+                fillArticleInfo(singleArticleInfo, d)
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad))
                 const dot = d3.select(this)
                     .style("opacity", 1)
                     .style("fill", "darkblue");
+
+            })
+            .on("dblclick", d => {
+                window.open(d.url, "_blank")
+            })
+            .on("mouseover", function(d,i) {
+                const dot = d3.select(this)
 
                 dot
                     .transition()
@@ -323,7 +327,6 @@ export default class Chart{
                     .style("background", d => conditionalColor(d, good, bad, 0.3));
                 handleArticleScroll(i)
 
-                fillArticleInfo(singleArticleInfo, d)
             })
             .on("mouseout", function(d){
                 d3.select(this)
@@ -374,6 +377,9 @@ export default class Chart{
                         return 20
                     });
                 handleArticleScroll(i)
+            })
+            .on("dblclick", d => {
+                window.open(d.url, "_blank")
             })
             .on("mouseover", function(d,i){
                 d3.selectAll(".article-list-item")
