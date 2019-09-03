@@ -176,7 +176,17 @@ const mergeLineData = (dateRange, lineData) => {
 
 
 const initialRender = (svg, intialize_duration, total) => {
+    const close = d3.select("#close-modal");
+    const modal = d3.select(".instruction-modal")
 
+
+    close
+        .on("click", () => {
+            modal
+                .attr("display", "none")
+            });
+    console.log(close)
+    console.log(modal)
 
     d3.select("html")
         .transition("appear")

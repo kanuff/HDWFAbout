@@ -193,6 +193,8 @@ export default class Chart{
             .tickValues([0])
             .scale(yscl)
 
+
+
         svg.select(".xaxis")
                 .transition()
             .delay(initialize_duration)
@@ -293,6 +295,14 @@ export default class Chart{
         //         .attr("cx", d => { return newX(parseTime(d.x)) })
         //         .attr("cy", d => { return newY(d.y) })
         // }
+        const close = d3.select("#close-modal");
+        const modal = d3.select(".instruction-modal")
+        close
+            .on("click", () => {
+                modal
+                    .style("display", "none")
+            });
+
 
         const createDots = svg.selectAll(".dot")
             .data(scatterData)

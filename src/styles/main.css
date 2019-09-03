@@ -381,3 +381,31 @@ li {
   -o-transition:      fill 0.15s, opacity 0.15s, background-color 0.2s;
   transition:         fill 0.15s, opacity 0.15s, background-color 0.2s;
 }
+
+.instruction-modal{
+	position: absolute;
+	padding: 50px;
+	background: rgba(25,25,25,0.9);
+	border-radius: 20px;
+	top: 75px;
+	right: 75px;
+	width: 50%;
+	font-size: 20px;
+	line-height: 175%;
+}
+
+#close-modal{
+	position: fixed;
+	color: white;
+	background: transparent;
+	border: none;
+	outline: none;
+	font-size: 30px;
+	top: 75px;
+	right: 85px;
+	cursor: pointer;
+}
+
+#close-modal:hover{
+	color: lightgrey;
+}
