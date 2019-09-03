@@ -102,33 +102,29 @@ const fillArticleInfo = (singleArticleInfo, d) => {
 const handleDotUX = (d, bigDot, singleArticleInfo, speed = 1, intialize_duration = 0) => {
     const delay = 2000 + intialize_duration
     if (speed >= 1){
-        // setTimeout(() => {
-            bigDot
+        bigDot
+            .transition()
+            .delay(delay)
+            .ease(d3.easeElastic)
+            .duration(2500)
+            .attr("r", 8)
+            .style("fill", "darkblue")
+            .style("opacity", 1);
+        if(speed >= 1){
+                singleArticleInfo
                 .transition()
-                .delay(delay)
-                .ease(d3.easeElastic)
-                .duration(2500)
-                .attr("r", 8)
-                .style("fill", "darkblue")
-                .style("opacity", 1);
-            if(speed >= 1){
-                // setTimeout(() => {
-                    singleArticleInfo
+                .delay(delay + 500)
+                .duration(800)
+                .style("background-color", "rgba(0, 0, 139, 0.5)");
+
+                fillArticleInfo(singleArticleInfo, d);
+
+                singleArticleInfo
                     .transition()
-                    .delay(delay + 500)
+                    .delay(delay + 1350)
                     .duration(800)
-                    .style("background-color", "rgba(0, 0, 139, 0.5)");
-
-                    fillArticleInfo(singleArticleInfo, d);
-
-                    singleArticleInfo
-                        .transition()
-                        .delay(delay + 1350)
-                        .duration(800)
-                        .style("background-color", "transparent")
-                // }, 800*speed)
-            }
-        // }, delay*speed)
+                    .style("background-color", "transparent")
+        }
     } else {
         bigDot
             .style("fill", "darkblue")
@@ -180,6 +176,8 @@ const mergeLineData = (dateRange, lineData) => {
 
 
 const initialRender = (svg, intialize_duration, total) => {
+
+
     d3.select("html")
         .transition("appear")
         .ease(d3.easeQuad)
@@ -218,6 +216,7 @@ const handleArticleScroll = i => {
         behavior: "smooth",
         block: "center"
     })
+    
     d3.select(`#article_${i}`)
         .style("background", "rgba(0, 0, 139, 0.5)")
 

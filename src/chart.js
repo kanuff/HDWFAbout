@@ -37,7 +37,7 @@ export default class Chart{
         this.dateRange = generateDateRange(this.startDate, this.endDate)
         this.xFormat = "%b-%d";
         this.initialize = true;
-        this.selectedDot = {};
+        this.selectedDot = {"dot": ""};
     }
 
     dummyData(){
@@ -152,7 +152,7 @@ export default class Chart{
 
     render(payload){
         const { scatterData, total } = payload
-        const { svg, height, width, good, bad, xFormat, margin, gX, gY } = this
+        const { svg, height, width, good, bad, xFormat, margin, gX, gY, selectedDot } = this
         const ydata = []
         const singleArticleInfo = d3.select(".article-info-container")
         const lineData = mergeLineData(this.dateRange, payload.lineData)
@@ -302,13 +302,16 @@ export default class Chart{
         createDots
             .on("click", function(d){
                 // window.open(d.url, "_blank")
+                selectedDot.dot = d3.select(this)
                 fillArticleInfo(singleArticleInfo, d)
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad))
-                const dot = d3.select(this)
+                selectedDot.dot
                     .style("opacity", 1)
                     .style("fill", "darkblue");
+                // console.log(selectedDot)
+                // console.log(d)
 
             })
             .on("dblclick", d => {
@@ -323,17 +326,31 @@ export default class Chart{
                     .duration(500)
                     .attr("r", 10)
 
+                dot
+                    .style("opacity", 1)
+                    .style("fill", "blue")
+
                 d3.selectAll(".article-list-item")
                     .style("background", d => conditionalColor(d, good, bad, 0.3));
                 handleArticleScroll(i)
 
             })
             .on("mouseout", function(d){
-                d3.select(this)
+                const dot = d3.select(this);
+                dot
                     .transition()
                     .ease(d3.easeElastic)
                     .duration(500)
                     .attr("r", 8)
+
+                dot
+                    .style("fill", d => conditionalColor(d, good, bad))
+                    .style("opacity", d => conditionalOpacity(d, good, bad))
+
+                selectedDot.dot
+                    .style("opacity", 1)
+                    .style("fill", "darkblue");
+
             })
 
         createDots
@@ -343,8 +360,9 @@ export default class Chart{
             .duration(1700)
             .attr("cx", d => { return xscl(parseTime(d.x)) })
             .attr("cy", d => { return yscl(d.y) })
-            .attr("r", d => {
+            .attr("r", function(d){
                 if (d.title === total.highScore.title) {
+                    selectedDot.dot = d3.select(this)
                     return 1
                 }
                 return 8
@@ -367,16 +385,26 @@ export default class Chart{
                 return `${date.toLocaleDateString("en-US", options)}: ${d.title}`
             })
             .on("click", function(d,i){
+                selectedDot.dot = d3.select(`#dot_${i}`)
+
                 d3.selectAll(".dot")
                     .style("fill", d => conditionalColor(d, good, bad))
                     .style("opacity", d => conditionalOpacity(d, good, bad));
+                selectedDot.dot
+                    .style("opacity", 1)
+                    .style("fill", "darkblue");
                 d3.select(`#dot_${i}`)
                     .attr("r", function (d, i) {
                         bigDot = d3.select(this)
                         handleDotUX(d, bigDot, singleArticleInfo, 0.2);
                         return 20
                     });
-                handleArticleScroll(i)
+                // selectedDot.dot
+                //     .style("opacity", 1)
+                //     .style("fill", "darkblue");
+                d3.select(`#article_${i}`)
+                    .style("background", "rgba(0, 0, 139, 0.5)")
+                // handleArticleScroll(i)
             })
             .on("dblclick", d => {
                 window.open(d.url, "_blank")
@@ -392,7 +420,22 @@ export default class Chart{
                     .style("opacity", d => conditionalOpacity(d, good, bad));
                 d3.select(`#dot_${i}`)
                     .style("opacity", 1)
-                    .style("fill", "darkblue");                
+                    .style("fill", "blue");    
+                
+                selectedDot.dot
+                    .style("opacity", 1)
+                    .style("fill", "darkblue");
+            
+            })
+            .on("mouseout", () => {
+                d3.selectAll(".dot")
+                    .style("fill", (d) => conditionalColor(d, good, bad))
+                    .style("opacity", (d) => conditionalOpacity(d, good, bad));
+
+                selectedDot.dot
+                    .style("opacity", 1)
+                    .style("fill", "darkblue");
+
             })
 
         d3.selectAll(".article-list-item")
