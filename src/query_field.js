@@ -65,7 +65,6 @@ const typingWord = (queryInput) => {
                 queryInput.setAttribute("placeholder", "")
                 typingWord(queryInput)
             }, 1500)
-            
         }
     }, 200)
     queryInput.addEventListener("focus", clearInput(queryInput, cycle))

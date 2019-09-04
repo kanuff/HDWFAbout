@@ -101,6 +101,9 @@ body > div {
 .query-field::placeholder{
 	color: rgba(255,255,255, 0.95);
 }
+.query-field:focus::placeholder{
+	color: rgba(0,0,0, 0);
+}
 
 .query-field:hover{
 	background-color: rgba(255,255,255, 0.1);
@@ -154,10 +157,6 @@ li{
 	/* box-shadow: transparent; */
 }
 
-
-rect {
-	/* z-index: -100; */
-}
 
 
 svg {
