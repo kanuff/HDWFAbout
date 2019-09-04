@@ -28,6 +28,7 @@ export default class Chart{
         this.height = 370 - this.margin.top - this.margin.bottom;
         this.svg = d3.select('svg')
             .attr("viewBox", `0 0 ${this.width + this.margin.left + this.margin.right} ${this.height + this.margin.top + this.margin.bottom}`)
+            // .style('background-color', 'rgba(190,190,190,1)')
             .style('background-color', 'transparent')
             .append("g")
             .attr("transform", `translate(${this.margin.left}, ${this.margin.top})`)
@@ -72,8 +73,8 @@ export default class Chart{
             .domain([d3.max(ydata), d3.min(ydata)])
             .range([0, height]);
 
-        const y_axis = d3.axisLeft()
-            .scale(yscl)
+        // const y_axis = d3.axisLeft()
+        //     .scale(yscl)
 
         this.gX = svg.append("g")
             .attr("transform", `translate(0,${(yscl(0))})`)
@@ -90,10 +91,10 @@ export default class Chart{
             .style("text-anchor", "start")
             .style("opacity", 0)
 
-        this.gY = svg.append("g")
-            .attr("class", `yaxis`)
-            .call(y_axis.tickSizeOuter(5))
-            .selectAll("text").style("fill", "rgba(0,0,0,0)")
+        // this.gY = svg.append("g")
+        //     .attr("class", `yaxis`)
+        //     .call(y_axis.tickSizeOuter(5))
+        //     .selectAll("text").style("fill", "rgba(0,0,0,0)")
 
         //good-label
         svg.append("text")
@@ -111,9 +112,14 @@ export default class Chart{
             .attr("x", 15)
             .attr("class", "bad-label")
             .attr("text-anchor", "right")
-            .style("fill", "transparent")
             .text("mostly negative")
             // .text("- sentiment")
+        svg.append("text")
+            .attr("y", yscl(0) - 5)
+            .attr("x", 15)
+            .attr("class", "neutral-label")
+            .attr("text-anchor", "right")
+            .text("neutral")
 
         //build good-line
         svg.append("line")
@@ -122,7 +128,6 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(good))
             .attr("fill", "none")
-            .attr("stroke", "transparent")
             .attr("stroke-width", "1px")
             .attr("class", "good-line")
             .style("stroke-dasharray", ("3, 3"));
@@ -148,6 +153,39 @@ export default class Chart{
             .attr("height", height)
             .attr("class", "zoom-window")
             .style("fill", "transparent")
+
+        const area = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x)) })
+            .y0(height)
+            .y1(yscl(bad))
+
+        svg.append("path")
+            .data([data])
+            .attr("class", "area")
+            .attr("d", area)
+            .style("fill", "rgba(255,0,0,0.1)")
+
+        const goodArea = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x)) })
+            .y0(0)
+            .y1(yscl(good))
+
+        svg.append("path")
+            .data([data])
+            .attr("class", "good-area")
+            .attr("d", goodArea)
+            .style("fill", "rgba(0,255,0,0.1)")
+
+        const neutralArea = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x)) })
+            .y0(yscl(good))
+            .y1(yscl(bad))
+
+        svg.append("path")
+            .data([data])
+            .attr("class", "neutral-area")
+            .attr("d", neutralArea)
+            .style("fill", "rgba(255,255,255,0.1)")
     }
 
     render(payload){
@@ -180,18 +218,18 @@ export default class Chart{
             .scale(xscl)
             
         const yscl = d3.scaleLinear()
-            .domain([d3.max(ydata), d3.min(ydata)])
+            .domain([d3.max(ydata)*1.05, d3.min(ydata)*1.05])
             .range([0, height]);
 
-        const y_axis = d3.axisLeft()
-            // .tickValues([bad, 0, good])
-            .tickFormat( function(d,i) {
-                // if(d === bad) return "negative"
-                if(d === 0) return "moderate"
-                // if(d === good) return "positive"
-            })
-            .tickValues([0])
-            .scale(yscl)
+        // const y_axis = d3.axisLeft()
+        //     // .tickValues([bad, 0, good])
+        //     .tickFormat( function(d,i) {
+        //         // if(d === bad) return "negative"
+        //         if(d === 0) return "moderate"
+        //         // if(d === good) return "positive"
+        //     })
+        //     .tickValues([0])
+        //     .scale(yscl)
 
 
 
@@ -211,6 +249,17 @@ export default class Chart{
                 .style("fill", "rgba(255,255,255,1)")
                 .style("opacity", 1)
 
+
+        svg.select(".neutral-label")
+            .transition()
+            .delay(initialize_duration)
+            .ease(d3.easeExp)
+            .duration(1700)
+            .attr("y", yscl(0) - 5)
+            .attr("x", 15)
+            .style("fill", "rgba(0, 0, 0, 0.6)")
+
+
         svg.select(".good-label")
             .transition()
             .delay(initialize_duration)
@@ -219,7 +268,8 @@ export default class Chart{
             .attr("y", yscl(good) - 5)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
-            .style("fill", "rgb(32, 196, 168)")
+            .style("fill", "rgba(0, 0, 0, 0.6)")
+            // .style("fill", "rgb(32, 196, 168)")
 
         svg.select(".bad-label")
             .transition()
@@ -229,23 +279,78 @@ export default class Chart{
             .attr("y", yscl(bad) + 15)
             .attr("x", 15)
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
-            .style("fill", "rgba(200, 0, 0, 0.6)")
+            .style("fill", "rgba(0, 0, 0, 0.6)")
 
 
-        svg.select(".yaxis")
+        // svg.select(".yaxis")
+        //     .transition()
+        //     .delay(initialize_duration)
+        //     .ease(d3.easeExp)
+        //     .duration(1700)
+        //     .call(y_axis.tickSizeOuter(5))
+        //     .selectAll("text")
+        //     .style("fill", "rgba(255,255,255,1)");
+
+        // svg.select(".yaxis")
+        //     .selectAll("text")
+        //     .attr("transform", `translate(-25, -43) rotate(-90)`)
+        //     .attr("font-size", "15px")
+        //     .attr("letter-spacing", "0.12em")
+        // const area = d3.svg.area()
+        //     .interpolate("linear")
+        //     .x(function () { return 0; })
+        //     .y1(function () { return yscl(good); })
+        //     .y0(function () { return yscl(good); })
+        //     .x1(function () { return width;})
+        
+        svg.append("defs").append("clipPath")
+            .attr("id", "clip")
+            .append("rect")
+            .attr("width", width)
+            .attr("height", height)
+
+        const area = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x))})
+            .y0(height)
+            .y1(yscl(bad))
+
+        const goodArea = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x))})
+            .y0(0)
+            .y1(yscl(good))
+
+        const neutralArea = d3.area()
+            .x(function (d) { return xscl(parseTime(d.x)) })
+            .y0(yscl(good))
+            .y1(yscl(bad))
+
+        svg.select(".neutral-area")
+            .data([scatterData])
             .transition()
             .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
-            .call(y_axis.tickSizeOuter(5))
-            .selectAll("text")
-            .style("fill", "rgba(255,255,255,1)");
+            .attr("d", neutralArea)
 
-        svg.select(".yaxis")
-            .selectAll("text")
-            .attr("transform", `translate(-25, -43) rotate(-90)`)
-            .attr("font-size", "15px")
-            .attr("letter-spacing", "0.12em")
+        svg.select(".area")
+            .data([scatterData])
+            .transition()
+            .delay(initialize_duration)
+            .ease(d3.easeExp)
+            .duration(1700)
+            // .attr("class", "area")
+            .attr("d", area)
+            // .style("fill", "rgba(255,0,0,0.1)")
+
+        svg.select(".good-area")
+            .data([scatterData])
+            .transition()
+            .delay(initialize_duration)
+            .ease(d3.easeExp)
+            .duration(1700)
+            // .attr("class", "area")
+            .attr("d", goodArea)
+            // .style("fill", "rgba(255,0,0,0.1)")
 
 
         svg.select(".good-line")
@@ -258,7 +363,7 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(good))
             .attr("display", () => conditionalDisplay(yscl(good), 0, false))
-            .style("stroke", "rgb(32, 196, 168)")
+            .style("stroke", "rgba(32, 196, 168,0.3)")
             .style("stroke-width", "2px")
 
         svg.select(".bad-line")
@@ -271,7 +376,7 @@ export default class Chart{
             .attr("x2", width)
             .attr("y2", yscl(bad))
             .attr("display", () => conditionalDisplay(yscl(bad), height, true))
-            .style("stroke", "rgba(200, 0, 0, 0.6)")
+            .style("stroke", "rgba(200, 0, 0, 0.3)")
             .style("stroke-width", "2px")
 
         // const zoom = d3.zoom()
@@ -295,6 +400,9 @@ export default class Chart{
         //         .attr("cx", d => { return newX(parseTime(d.x)) })
         //         .attr("cy", d => { return newY(d.y) })
         // }
+
+
+        
         const close = d3.select("#close-modal");
         const modal = d3.select(".instruction-modal")
         close
@@ -384,13 +492,14 @@ export default class Chart{
         const articlesContainer = d3.select("#articles-list")
                                     .selectAll("li")
                                     .data(scatterData)
+
         articlesContainer
             .enter().append("li")
             .attr("class", "article-list-item")
             .attr("id", (_,i) => {return "article_" + i})
             .style("background", d => conditionalColor(d, good, bad, 0.3))
             .text( function(d){
-                const date = new Date(d.x)
+                const date = new Date(new Date(d.x).setDate(new Date(d.x).getDate()+1))
                 const options = { month: 'short', day: 'numeric' }
                 return `${date.toLocaleDateString("en-US", options)}: ${d.title}`
             })

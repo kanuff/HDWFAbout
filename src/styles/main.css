@@ -86,6 +86,10 @@ body > div {
 	padding: 5px;
 }
 
+/* .rect{
+	clip-path: 
+} */
+
 .query-field{
 	border: none;
 	outline: none;
@@ -157,13 +161,16 @@ li{
 	/* box-shadow: transparent; */
 }
 
-
+.svg-container{
+	padding-top: 25px;
+}
 
 svg {
 	display: flex;
 	margin: 0 auto;
-	border-radius: 4px;
+	border-radius: 12px;
 	width: auto;
+
 	/* z-index: 1000; */
 	/* box-shadow: black 1px 1px 5px 0px; */
 	/* box-shadow: transparent; */
@@ -326,6 +333,9 @@ h4 {
 	line-height: 175%;
 }
 
+.good-area, .area{
+	clip-path: url(#clip)
+}
 
 
 ul {
