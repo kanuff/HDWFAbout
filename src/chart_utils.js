@@ -177,7 +177,6 @@ const mergeLineData = (dateRange, lineData) => {
 
 const initialRender = (svg, intialize_duration, total) => {
 
-
     d3.select("html")
         .transition("appear")
         .ease(d3.easeQuad)

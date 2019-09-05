@@ -163,7 +163,8 @@ export default class Chart{
             .data([data])
             .attr("class", "area")
             .attr("d", area)
-            .style("fill", "rgba(255,0,0,0.1)")
+            .style("fill", "transparent")
+            // .style("fill", "rgba(255,0,0,0.1)")
 
         const goodArea = d3.area()
             .x(function (d) { return xscl(parseTime(d.x)) })
@@ -174,7 +175,8 @@ export default class Chart{
             .data([data])
             .attr("class", "good-area")
             .attr("d", goodArea)
-            .style("fill", "rgba(0,255,0,0.1)")
+            .style("fill", "transparent")
+            // .style("fill", "rgba(0,255,0,0.1)")
 
         const neutralArea = d3.area()
             .x(function (d) { return xscl(parseTime(d.x)) })
@@ -185,7 +187,8 @@ export default class Chart{
             .data([data])
             .attr("class", "neutral-area")
             .attr("d", neutralArea)
-            .style("fill", "rgba(255,255,255,0.1)")
+            .style("fill", "transparent")
+            // .style("fill", "rgba(255,255,255,0.1)")
     }
 
     render(payload){
@@ -331,6 +334,7 @@ export default class Chart{
             .ease(d3.easeExp)
             .duration(1700)
             .attr("d", neutralArea)
+            .style("fill", "rgba(255,255,255,0.1)")
 
         svg.select(".area")
             .data([scatterData])
@@ -338,9 +342,8 @@ export default class Chart{
             .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
-            // .attr("class", "area")
             .attr("d", area)
-            // .style("fill", "rgba(255,0,0,0.1)")
+            .style("fill", "rgba(255,0,0,0.1)")
 
         svg.select(".good-area")
             .data([scatterData])
@@ -348,9 +351,8 @@ export default class Chart{
             .delay(initialize_duration)
             .ease(d3.easeExp)
             .duration(1700)
-            // .attr("class", "area")
             .attr("d", goodArea)
-            // .style("fill", "rgba(255,0,0,0.1)")
+            .style("fill", "rgba(0,255,0,0.1)")
 
 
         svg.select(".good-line")

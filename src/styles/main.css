@@ -334,7 +334,7 @@ h4 {
 }
 
 .good-area, .area{
-	clip-path: url(#clip)
+	clip-path: url(#clip);
 }
 
 

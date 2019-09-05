@@ -16,7 +16,7 @@ export default (props) => {
     }, 1000)
     
     form.appendChild(queryInput)
-    form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
+    // form.addEventListener("input", () => debouncedTyping(event, props, queryInput))
     // form.addEventListener("submit", () => { handleTyping(event, props, queryInput)})
     form.addEventListener("submit", () => {
         event.preventDefault()
